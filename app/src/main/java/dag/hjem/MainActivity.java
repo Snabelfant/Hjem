@@ -5,37 +5,67 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dag.hjem.model.UtmPosition;
+import dag.hjem.model.location.Location;
+import dag.hjem.model.location.StopLocation;
+import dag.hjem.model.location.UtmLocation;
+import dag.hjem.model.ruter.Stop;
+
 
 public class MainActivity extends ActionBarActivity {
-    private Spinner fromList;
+    private Spinner fromSpinner;
+    private Spinner toSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.hjem32);
+        getSupportActionBar().setTitle(" Hjem");
 
         initLists();
     }
 
     private void initLists() {
-        fromList = (Spinner) findViewById(R.id.fromList);
-        List<String> list = new ArrayList<String>();
-        list.add("list 1");
-        list.add("list 2");
-        list.add("list 3");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fromList.setAdapter(dataAdapter);
+        List<Location> locations = getLocations();
 
+        fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
+        List<Location> from = new ArrayList<>(locations);
+        from.add(0, Location.FROM_HERE);
+        from.add(1, Location.HJEM);
+
+        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, from);
+        fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fromSpinner.setAdapter(fromAdapter);
+
+        toSpinner = (Spinner) findViewById(R.id.toSpinner);
+        List<Location> to = new ArrayList<>(locations);
+        to.add(0, Location.HJEM);
+        to.add( Location.TO_HERE);
+
+//        ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
+//                android.R.layout.simple_spinner_item, to);
+        ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
+                R.layout.spinner_layout, to);
+        toAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        toSpinner.setAdapter(toAdapter);
     }
 
+    private List<Location> getLocations() {
+        List<Location> list = new ArrayList<>();
+        list.add(new StopLocation("Bryn kirke", new Stop()));
+        list.add(new StopLocation("Gardermoen", new Stop()));
+        list.add(new StopLocation("Jobb", new Stop()));
+        list.add(new UtmLocation("Øvingshotellet", new UtmPosition("32", 512000, 6000001)));
+        return list;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
