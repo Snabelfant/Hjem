@@ -17,11 +17,6 @@
         android:layout_below="@+id/til"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fra" />
-
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Til"
+            android:text="  ---> "
             android:id="@+id/til" />
 
         <Spinner
@@ -41,6 +36,17 @@
             android:id="@+id/toSpinner"
             android:layout_weight="1"
             android:spinnerMode="dropdown" />
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            android:id="@+id/time"
+        </TimePicker>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/find"
+            android:text="Finn"/>
 
     </LinearLayout>
 

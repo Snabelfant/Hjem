@@ -41,8 +41,8 @@ public class MainActivity extends ActionBarActivity {
         from.add(1, Location.HJEM);
 
         ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, from);
-        fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.spinner_layout, from);
+        fromAdapter.setDropDownViewResource(R.layout.spinner_layout);
         fromSpinner.setAdapter(fromAdapter);
 
         toSpinner = (Spinner) findViewById(R.id.toSpinner);
@@ -50,8 +50,6 @@ public class MainActivity extends ActionBarActivity {
         to.add(0, Location.HJEM);
         to.add( Location.TO_HERE);
 
-//        ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
-//                android.R.layout.simple_spinner_item, to);
         ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_layout, to);
         toAdapter.setDropDownViewResource(R.layout.spinner_layout);
