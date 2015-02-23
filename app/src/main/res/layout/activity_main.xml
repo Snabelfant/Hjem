@@ -3,49 +3,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="53dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:background="#fffffde7"
         android:layout_below="@+id/til"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fromSpinner"
-            android:layout_weight="1"
             android:spinnerMode="dropdown" />
 
-        <TextView
+         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  ---> "
-            android:id="@+id/til" />
+            android:id="@+id/toSpinner"
+            android:spinnerMode="dropdown" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/toSpinner"
-            android:layout_weight="1"
+            android:id="@+id/timeDirectionSpinner"
             android:spinnerMode="dropdown" />
-        <TimePicker
+
+        <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            android:id="@+id/time"
-        </TimePicker>
+            android:layout_height="wrap_content"
+            android:id="@+id/timeOptionsSpinner"
+            android:spinnerMode="dropdown" />
+        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/find"
+            android:text="Finn"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/gpsPosition"
+            android:background="#fffff9c4"
+            android:textSize="15sp"
             android:text="Finn"/>
 
     </LinearLayout>
@@ -53,5 +72,15 @@
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentStart="true"></TableLayout>
+        android:layout_alignParentStart="true">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        </TableRow>
+
+    </TableLayout>
+
+
 </LinearLayout>

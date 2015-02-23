@@ -1,6 +1,7 @@
 package dag.hjem.model.location;
 
-import dag.hjem.model.UtmPosition;
+
+import gps.UtmPosition;
 
 /**
  * Created by Dag on 22.02.2015.

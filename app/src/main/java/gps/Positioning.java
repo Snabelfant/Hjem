@@ -1,11 +1,10 @@
-package posisjon;
+package gps;
 
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.widget.TextView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,26 +13,23 @@ import android.widget.TextView;
  * Time: 23:04
  * To change this template use File | Settings | File Templates.
  */
-public class Posisjonering {
+public class Positioning {
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private Posisjon bestePosisjonHittil = null;
+
+    private Location bestLocation = null;
+    private GpsObserver gpsObserver;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private final TextView textView;
 
-    public Posisjonering(Context context, TextView textView) {
+    public Positioning(Context context, final GpsObserver gpsObserver) {
+        this.gpsObserver = gpsObserver;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        this.textView = textView;
         locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                int secondsSinceLastBestPositionFound = 0;
-                if (isBetterLocation(location, bestePosisjonHittil)) {
-                    bestePosisjonHittil = new Posisjon(location);
-                } else {
-                    secondsSinceLastBestPositionFound = (int) ((location.getTime() - bestePosisjonHittil.getTime())/1000);
+            public void onLocationChanged(android.location.Location location) {
+                if (isBetterLocation(location, bestLocation)) {
+                    bestLocation = location;
+                    gpsObserver.positionChanged(UtmPosition.fromLatLon(bestLocation));
                 }
-
-                Posisjonering.this.textView.setText(bestePosisjonHittil.toString() + " (" + secondsSinceLastBestPositionFound + ")");
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -46,16 +42,15 @@ public class Posisjonering {
             }
         };
 
-        Location sisteKjente = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (sisteKjente != null) {
-            bestePosisjonHittil = new Posisjon(sisteKjente);
-            Posisjonering.this.textView.setText(bestePosisjonHittil.toString());
+        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (lastKnownLocation != null) {
+            bestLocation = lastKnownLocation;
+            gpsObserver.positionChanged(UtmPosition.fromLatLon(bestLocation));
         }
 
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
-
 
     private boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
@@ -97,6 +92,11 @@ public class Posisjonering {
             return true;
         }
         return false;
+    }
+
+
+    public Location getBestLocation() {
+        return bestLocation;
     }
 
     /**
