@@ -49,23 +49,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addListeners() {
-        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                TimeDirection timeDirection = (TimeDirection) parentView.getItemAtPosition(position);
-                List<TimeOption> timeOptions = getTimeSpinnerList(timeDirection);
-                ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<TimeOption>(this,
-                        R.layout.spinner_layout, timeOptions);
-                timeOptionSpinner.setAdapter(timeOptionAdapter);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
+//        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//                TimeDirection timeDirection = (TimeDirection) parentView.getItemAtPosition(position);
+//                List<TimeOption> timeOptions = getTimeSpinnerList(timeDirection);
+//                ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<TimeOption>(this,
+//                        R.layout.spinner_layout, timeOptions);
+//                timeOptionSpinner.setAdapter(timeOptionAdapter);
+//                }
+//            };
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//                // your code here
+//            }
+//
+//        });
     }
 
     private void initInputs() {
@@ -115,9 +115,9 @@ public class MainActivity extends ActionBarActivity {
     }
     private List<Location> getLocations() {
         List<Location> list = new ArrayList<>();
-        list.add(new StopLocation("Bryn kirke", new Stop()));
-        list.add(new StopLocation("Gardermoen", new Stop()));
-        list.add(new StopLocation("Jobb", new Stop()));
+//        list.add(new StopLocation("Bryn kirke", new Stop()));
+//        list.add(new StopLocation("Gardermoen", new Stop()));
+//        list.add(new StopLocation("Jobb", new Stop()));
         list.add(new UtmLocation("Øvingshotellet", new UtmPosition(0, "32", 512000, 6000001)));
         return list;
     }

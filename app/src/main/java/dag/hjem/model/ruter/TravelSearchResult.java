@@ -3,10 +3,12 @@ package dag.hjem.model.ruter;
 import java.util.ArrayList;
 import java.util.List;
 
+import dag.hjem.model.travelproposal.Travel;
+
 public class TravelSearchResult {
     private String from;
     private String to;
-    private List<TravelProposalX> travelProposals;
+    private List<Travel> travelProposals;
 
     public static TravelSearchResult fromRuter(String from, String to, TravelResponse ruterResponse) {
         TravelSearchResult travelSearchResult = new TravelSearchResult();
@@ -15,8 +17,8 @@ public class TravelSearchResult {
         travelSearchResult.travelProposals = new ArrayList<>();
 
         for (TravelProposal travelProposal : ruterResponse.getTravelProposals()) {
-            TravelProposalX travelProposalX = TravelProposalX.fromRuter(travelProposal);
-            travelSearchResult.travelProposals.add(travelProposalX);
+            Travel travel = Travel.fromRuter(travelProposal);
+            travelSearchResult.travelProposals.add(travel);
         }
 
         return travelSearchResult;
@@ -25,8 +27,8 @@ public class TravelSearchResult {
     public String toString() {
         StringBuilder s = new StringBuilder("*** " + from + " -> " + to + " ***\n");
 
-        for (TravelProposalX travelProposalX : travelProposals) {
-            s.append(travelProposalX.toString());
+        for (Travel travel : travelProposals) {
+            s.append(travel.toString());
         }
 
         return s.toString();

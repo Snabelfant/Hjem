@@ -1,5 +1,8 @@
 package dag.hjem.model.ruter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,19 +13,22 @@ public class TravelProposal {
     private String totalTravelTime;
     private List<Stage> stages;
 
-
-    public TravelProposal( @JsonFormat(shape= JsonFormat.Shape.STRING,timezone="CET")
-                           @JsonProperty("DepartureTime") Date departureTime,
-                           @JsonFormat(shape= JsonFormat.Shape.STRING,timezone="CET")
-                           @JsonProperty("ArrivalTime") Date arrivalTime,
-                           @JsonProperty("Remarks") List<String> remarks,
-                           @JsonProperty("TotalTravelTime") String totalTravelTime,
-                           @JsonProperty("Stages") List<Stage> stages) {
+    public TravelProposal(@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "CET")
+                          @JsonProperty("DepartureTime") Date departureTime,
+                          @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "CET")
+                          @JsonProperty("ArrivalTime") Date arrivalTime,
+                          @JsonProperty("Remarks") List<String> remarks,
+                          @JsonProperty("TotalTravelTime") String totalTravelTime,
+                          @JsonProperty("Stages") List<Stage> stages) {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.remarks = remarks;
         this.totalTravelTime = totalTravelTime;
         this.stages = stages;
+    }
+
+    public String getTotalTravelTime() {
+        return totalTravelTime;
     }
 
     public String toString() {

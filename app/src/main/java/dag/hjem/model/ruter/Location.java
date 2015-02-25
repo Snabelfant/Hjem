@@ -1,5 +1,7 @@
 package dag.hjem.model.ruter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Location {
     private int x;
     private int y;

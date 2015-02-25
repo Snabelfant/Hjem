@@ -1,42 +1,53 @@
 package dag.hjem.ruterapi;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
+
 import java.util.Date;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import dag.hjem.model.ruter.Place;
 import dag.hjem.model.ruter.Stop;
 import dag.hjem.model.ruter.TravelResponse;
+import dag.hjem.model.ruter.TravelSearchResult;
 
 /**
  * Created by Dag on 25.02.2015.
  */
 public class RuterApi {
-    private Client client;
+private WebTarget ruterApi;
 
-    client = ClientBuilder.newClient().register(JacksonFeature.class);
-    ruterApi = client.target("http://reisapi.ruter.no");
-}
+    public RuterApi() {
+        Client client = ClientBuilder.newClient().register(JacksonFeature.class);
+        ruterApi = client.target("http://reisapi.ruter.no");
 
-    private boolean heartBeat() {
+    }
+
+    public boolean heartBeat() {
         WebTarget target = ruterApi.path("/heartbeat/index");
         Response response = call(target);
         checkResponse(response);
         return "\"Pong\"".equals(response.readEntity(String.class));
     }
 
-    private Stop getStop(int id) {
+    public Stop getStop(int id) {
         WebTarget target = ruterApi.path("/Place/GetStop/{id}").resolveTemplate("id", id);
         Response response = call(target);
         checkResponse(response);
         Stop stop = response.readEntity(Stop.class);
 
-        if (stop.getId() != ) {
+        if (stop.getId() != 0 ) {
             return stop;
         }
 
         throw new RuntimeException("Stop.id==0: " + id);
     }
 
-    private TravelResponse getTravel(Place fromPlace, Place toPlace, boolean isAfter, Date departureOrArrivalTime) {
+    public TravelResponse getTravel(Place fromPlace, Place toPlace, boolean isAfter, Date departureOrArrivalTime) {
         WebTarget target = ruterApi.path("travel/gettravels")
                 .queryParam("fromplace", fromPlace.toParam())
                 .queryParam("toplace", toPlace.toParam())

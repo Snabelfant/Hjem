@@ -1,5 +1,7 @@
 package dag.hjem.model.ruter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ReisError {
     private String id;
     private String description;

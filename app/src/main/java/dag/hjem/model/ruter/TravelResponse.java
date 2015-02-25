@@ -1,5 +1,7 @@
 package dag.hjem.model.ruter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class TravelResponse {

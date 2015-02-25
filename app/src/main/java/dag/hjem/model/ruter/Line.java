@@ -1,5 +1,7 @@
 package dag.hjem.model.ruter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Line {
     private int id;
     private String name;
