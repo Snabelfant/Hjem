@@ -1,15 +1,14 @@
 package dag.hjem.model.travelproposal;
 
-import dag.hjem.model.ruter.Deviation;
-import dag.hjem.model.ruter.TransportationType;
-import dag.hjem.model.ruter.TravelSection;
-import dag.hjem.model.ruter.WalkingSection;
+import dag.hjem.ruter.model.Deviation;
+import dag.hjem.ruter.model.TransportationType;
+import dag.hjem.ruter.model.Stage;
 
-import static dag.hjem.model.ruter.Util.toDuration;
+import static dag.hjem.model.travelproposal.Util.toDuration;
 
 public abstract class Section {
 
-    public static Section fromRuter(dag.hjem.model.ruter.Stage ruterStage) {
+    public static Section fromRuter(Stage ruterStage) {
         if (ruterStage.getTransportation() == TransportationType.WALKING) {
             WalkingSection stage = new WalkingSection(toDuration(ruterStage.getWalkingTime()));
             return stage;

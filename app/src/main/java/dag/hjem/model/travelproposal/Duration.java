@@ -1,4 +1,4 @@
-package dag.hjem.model.ruter;
+package dag.hjem.model.travelproposal;
 
 /**
  * Created by Dag on 24.02.2015.

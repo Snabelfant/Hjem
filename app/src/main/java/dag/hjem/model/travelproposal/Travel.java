@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import dag.hjem.model.ruter.Duration;
-import dag.hjem.model.ruter.TravelProposal;
+import dag.hjem.ruter.model.TravelProposal;
+import dag.hjem.ruter.model.Stage;
 
-import static dag.hjem.model.ruter.Util.formatDuration;
-import static dag.hjem.model.ruter.Util.formatTime;
-import static dag.hjem.model.ruter.Util.toDuration;
+import static dag.hjem.model.travelproposal.Util.formatDuration;
+import static dag.hjem.model.travelproposal.Util.formatTime;
+import static dag.hjem.model.travelproposal.Util.toDuration;
 
 public class Travel {
     private Date departureTime;
@@ -26,7 +26,7 @@ public class Travel {
         travel.totalTravelTime = toDuration(ruterProposal.getTotalTravelTime());
         travel.remarks = ruterProposal.getRemarks();
         travel.sections = new ArrayList<>();
-        for (dag.hjem.model.ruter.Stage ruterStage : ruterProposal.getStages()) {
+        for (Stage ruterStage : ruterProposal.getStages()) {
             Section section = Section.fromRuter(ruterStage);
             travel.sections.add(section);
         }

@@ -1,4 +1,4 @@
-package dag.hjem.model.ruter;
+package dag.hjem.ruter.model;
 public  class PlaceByLocation extends Place {
     private Location location;
 

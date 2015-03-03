@@ -1,9 +1,10 @@
-package dag.hjem.model.ruter;
+package dag.hjem.model.travelproposal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dag.hjem.model.travelproposal.Travel;
+import dag.hjem.ruter.model.TravelProposal;
+import dag.hjem.ruter.model.TravelResponse;
 
 public class TravelSearchResult {
     private String from;

@@ -1,4 +1,4 @@
-package dag.hjem.model.ruter;
+package dag.hjem.model.travelproposal;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

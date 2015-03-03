@@ -1,4 +1,4 @@
-package dag.hjem.ruterapi;
+package dag.hjem.ruter.api;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 
@@ -10,10 +10,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import dag.hjem.model.ruter.Place;
-import dag.hjem.model.ruter.Stop;
-import dag.hjem.model.ruter.TravelResponse;
-import dag.hjem.model.ruter.TravelSearchResult;
+import dag.hjem.ruter.model.Place;
+import dag.hjem.ruter.model.Stop;
+import dag.hjem.ruter.model.TravelResponse;
+import dag.hjem.model.travelproposal.TravelSearchResult;
 
 /**
  * Created by Dag on 25.02.2015.
@@ -75,9 +75,4 @@ private WebTarget ruterApi;
         }
     }
 
-    private TravelSearchResult getTravelProposals(Place fromPlace, Place toPlace, boolean isAfter, Date departureOrArrivalTime) {
-        TravelResponse travelResponse = getTravel(fromPlace, toPlace, isAfter, departureOrArrivalTime);
-        return TravelSearchResult.fromRuter(fromPlace.getName(), toPlace.getName(), travelResponse);
-    }
-
-}
+ }

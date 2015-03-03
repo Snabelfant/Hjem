@@ -1,13 +1,14 @@
-package dag.hjem.model.ruter;
+package dag.hjem.model.travelproposal;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import dag.hjem.model.travelproposal.Duration;
 import dag.hjem.model.travelproposal.Section;
 
-import static dag.hjem.model.ruter.Util.formatDuration;
-import static dag.hjem.model.ruter.Util.formatTime;
+import static dag.hjem.model.travelproposal.Util.formatDuration;
+import static dag.hjem.model.travelproposal.Util.formatTime;
 
 
 public class TravelSection extends Section {

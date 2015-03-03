@@ -2,14 +2,14 @@ package dag.hjem;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,8 @@ import java.util.List;
 import dag.hjem.model.TimeOption;
 import dag.hjem.model.TimeDirection;
 import dag.hjem.model.location.Location;
-import dag.hjem.model.location.StopLocation;
 import dag.hjem.model.location.UtmLocation;
-import dag.hjem.model.ruter.Stop;
+import dag.hjem.ruter.api.RuterApi;
 import gps.GpsObserver;
 import gps.Positioning;
 import gps.UtmPosition;
@@ -30,7 +29,10 @@ public class MainActivity extends ActionBarActivity {
     private Spinner toSpinner;
     private Spinner timeDirectionSpinner;
     private Spinner timeOptionSpinner;
+    private Button  findButton;
+
     private Positioning positioning;
+private RuterApi ruterApi = new RuterApi();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addListeners() {
+        findButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean b = ruterApi.heartBeat();
+                Log.i("hjem", Boolean.toString(b));
+                Toast.makeText(MainActivity.this, Boolean.toString(b), Toast.LENGTH_LONG);
+            }
+        });
 //        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -69,6 +79,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void initInputs() {
+        findButton = (Button) findViewById(R.id.find);
+
         List<Location> locations = getLocations();
 
         fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
@@ -84,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
         toSpinner = (Spinner) findViewById(R.id.toSpinner);
         List<Location> to = new ArrayList<>(locations);
         to.add(0, Location.HJEM);
-        to.add( Location.TO_HERE);
+        to.add(Location.TO_HERE);
 
         ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_layout, to);
@@ -99,7 +111,7 @@ public class MainActivity extends ActionBarActivity {
         timeDirectionSpinner.setSelection(0);
 
         timeOptionSpinner = (Spinner) findViewById(R.id.timeOptionsSpinner);
-        List<TimeOption> timeOptions = getTimeSpinnerList((TimeDirection)timeDirectionSpinner.getSelectedItem());
+        List<TimeOption> timeOptions = getTimeSpinnerList((TimeDirection) timeDirectionSpinner.getSelectedItem());
         ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_layout, timeOptions);
         timeOptionAdapter.setDropDownViewResource(R.layout.spinner_layout);

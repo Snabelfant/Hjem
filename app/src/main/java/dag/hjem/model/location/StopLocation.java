@@ -1,6 +1,6 @@
 package dag.hjem.model.location;
 
-import dag.hjem.model.ruter.Stop;
+import dag.hjem.ruter.model.Stop;
 
 /**
  * Created by Dag on 22.02.2015.

@@ -1,4 +1,4 @@
-package dag.hjem.model.ruter;
+package dag.hjem.ruter.model;
 
 public  abstract class Place {
     private String name;

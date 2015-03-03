@@ -1,4 +1,4 @@
-package dag.hjem.model.ruter;
+package dag.hjem.ruter.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

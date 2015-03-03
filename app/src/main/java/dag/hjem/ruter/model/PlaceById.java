@@ -1,4 +1,4 @@
-package dag.hjem.model.ruter;
+package dag.hjem.ruter.model;
 
 public class PlaceById extends Place {
     private int ruterId;
