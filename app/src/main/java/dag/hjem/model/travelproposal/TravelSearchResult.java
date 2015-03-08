@@ -10,6 +10,13 @@ public class TravelSearchResult {
     private String from;
     private String to;
     private List<Travel> travelProposals;
+    private Exception exception;
+
+    public static TravelSearchResult fromException(Exception exception) {
+        TravelSearchResult travelSearchResult = new TravelSearchResult();
+        travelSearchResult.exception = exception;
+        return travelSearchResult;
+    }
 
     public static TravelSearchResult fromRuter(String from, String to, TravelResponse ruterResponse) {
         TravelSearchResult travelSearchResult = new TravelSearchResult();

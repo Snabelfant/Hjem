@@ -28,7 +28,7 @@ public class RuterApi {
 
     public boolean heartBeat() throws IOException {
         String result = heartBeatClient.get(String.class);
-        Log.i("hjem", "rr'" + result + "'");
+        Log.i("hjem", result);
         return "Pong".equals(result);
     }
 
@@ -55,7 +55,7 @@ public class RuterApi {
         if (toPlaceId != null) {
             c = c.queryParam("toplace", toPlaceId);
         }else {
-            c = c.encodedQuery("toPlace="+ toXY(toX, toY));
+            c = c.encodedQuery("toPlace=" + toXY(toX, toY));
         }
 
         return c.get(TravelResponse.class);

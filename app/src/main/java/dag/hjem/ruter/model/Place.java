@@ -19,6 +19,23 @@ public class Place {
     private String district;
     private boolean isAlightingAllowed;
     private boolean isBoardingAllowed;
+
+    public int getId() {
+        return id;
+    }
+
+    public PlaceType getPlaceType() {
+        return placeType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
     private boolean isRealTimeStop;
     private List<Line> lines;
     private List<StopPoint> stopPoints;
