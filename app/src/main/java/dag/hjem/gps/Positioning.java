@@ -1,4 +1,4 @@
-package gps;
+package dag.hjem.gps;
 
 import android.content.Context;
 import android.location.Location;

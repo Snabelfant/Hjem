@@ -7,28 +7,28 @@ import java.util.List;
 import dag.hjem.ruter.model.TravelProposal;
 import dag.hjem.ruter.model.Stage;
 
-import static dag.hjem.model.travelproposal.Util.formatDuration;
 import static dag.hjem.model.travelproposal.Util.formatTime;
-import static dag.hjem.model.travelproposal.Util.toDuration;
 
 public class Travel {
-    private Date departureTime;
-    private Date arrivalTime;
-    private Duration totalTravelTime;
+    private String departureTime;
+    private String arrivalTime;
+    private String totalTravelTime;
     private List<String> remarks;
     private List<Section> sections;
 
 
     public static Travel fromRuter(TravelProposal ruterProposal) {
         Travel travel = new Travel();
-        travel.departureTime = ruterProposal.getDepartureTime();
-        travel.arrivalTime = ruterProposal.getArrivalTime();
-        travel.totalTravelTime = toDuration(ruterProposal.getTotalTravelTime());
+        travel.departureTime = Util.formatTime(ruterProposal.getDepartureTime());
+        travel.arrivalTime = Util.formatTime(ruterProposal.getArrivalTime());
+        travel.totalTravelTime = Util.toHhMm(ruterProposal.getTotalTravelTime());
         travel.remarks = ruterProposal.getRemarks();
         travel.sections = new ArrayList<>();
         for (Stage ruterStage : ruterProposal.getStages()) {
             Section section = Section.fromRuter(ruterStage);
-            travel.sections.add(section);
+            if (section != null) {
+                travel.sections.add(section);
+            }
         }
 
         return travel;
@@ -38,11 +38,11 @@ public class Travel {
         StringBuilder s = new StringBuilder();
 
         s.append("++ ")
-                .append(formatTime(departureTime))
+                .append(departureTime)
                 .append(" - ")
-                .append(formatTime(arrivalTime))
+                .append(arrivalTime)
                 .append(" (")
-                .append(formatDuration(totalTravelTime))
+                .append(totalTravelTime)
                 .append(")\n");
 
         for (String remark : remarks) {

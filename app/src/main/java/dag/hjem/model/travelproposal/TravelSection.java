@@ -4,28 +4,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import dag.hjem.model.travelproposal.Duration;
 import dag.hjem.model.travelproposal.Section;
 
-import static dag.hjem.model.travelproposal.Util.formatDuration;
 import static dag.hjem.model.travelproposal.Util.formatTime;
 
 
 public class TravelSection extends Section {
-    private Date departureTime;
+    private String departureTime;
     private String departureStopName;
-    private Date arrivalTime;
+    private String arrivalTime;
     private String arrivalStopName;
-    private Duration travelTime;
+    private String travelTime;
     private String transportation;
     private String lineName;
     private String destination;
 
-    public Date getDepartureTime() {
+    public String getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(Date departureTime) {
+    public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
 
@@ -37,11 +35,11 @@ public class TravelSection extends Section {
         this.departureStopName = departureStopName;
     }
 
-    public Date getArrivalTime() {
+    public String getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
+    public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
@@ -53,11 +51,11 @@ public class TravelSection extends Section {
         this.arrivalStopName = arrivalStopName;
     }
 
-    public Duration getTravelTime() {
+    public String getTravelTime() {
         return travelTime;
     }
 
-    public void setTravelTime(Duration travelTime) {
+    public void setTravelTime(String travelTime) {
         this.travelTime = travelTime;
     }
 
@@ -94,12 +92,10 @@ public class TravelSection extends Section {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("  - ")
-                .append(transportation).append(" ")
-                .append(lineName).append("/").append(destination).append(": ")
-                .append(formatTime(departureTime)).append("/").append(departureStopName)
-                .append(" - ")
-                .append(formatTime(arrivalTime)).append("/").append(arrivalStopName)
-                .append(" (").append(formatDuration(travelTime)).append(")\n");
+                .append(departureTime).append("/").append(departureStopName).append(": ")
+                .append(transportation).append(" ").append(lineName).append(" (").append(destination).append(") -> ")
+                .append(arrivalTime).append("/").append(arrivalStopName)
+                .append(" (").append(travelTime).append(")\n");
 
         for (String deviation : deviations) {
             s.append("     ! ").append(deviation).append("\n");

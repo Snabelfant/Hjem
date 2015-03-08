@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +20,9 @@ import dag.hjem.model.TimeDirection;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.UtmLocation;
 import dag.hjem.ruter.api.RuterApi;
-import gps.GpsObserver;
-import gps.Positioning;
-import gps.UtmPosition;
+import dag.hjem.gps.GpsObserver;
+import dag.hjem.gps.Positioning;
+import dag.hjem.gps.UtmPosition;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -54,7 +55,12 @@ private RuterApi ruterApi = new RuterApi();
         findButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean b = ruterApi.heartBeat();
+                boolean b = false;
+                try {
+                    b = ruterApi.heartBeat();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Log.i("hjem", Boolean.toString(b));
                 Toast.makeText(MainActivity.this, Boolean.toString(b), Toast.LENGTH_LONG);
             }

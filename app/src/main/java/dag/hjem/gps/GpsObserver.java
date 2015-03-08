@@ -1,7 +1,5 @@
-package gps;
+package dag.hjem.gps;
 
-
-import android.location.Location;
 
 /**
  * Created by Dag on 23.02.2015.

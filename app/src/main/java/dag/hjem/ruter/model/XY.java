@@ -1,12 +1,13 @@
 package dag.hjem.ruter.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Location {
+import org.codehaus.jackson.annotate.JsonProperty;
+
+public class XY {
     private int x;
     private int y;
 
-    public Location(@JsonProperty("X") int x, @JsonProperty("Y") int y) {
+    public XY(@JsonProperty("X") int x, @JsonProperty("Y") int y) {
         this.x = x;
         this.y = y;
     }

@@ -1,11 +1,9 @@
-package gps;
+package dag.hjem.gps;
 
 import android.location.Location;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Formatter;
-import java.util.logging.SimpleFormatter;
 
 public class UtmPosition {
     private static SimpleDateFormat TIME = new SimpleDateFormat("HH:mm:ss");

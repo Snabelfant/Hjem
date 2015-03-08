@@ -86,13 +86,12 @@
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="jackson-databind-2.5.1" level="project" />
+    <orderEntry type="library" exported="" name="jackson-mapper-asl-1.9.13" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="xjackson-core-asl-1.9.13" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="hk2-api-2.3.0" level="project" />
-    <orderEntry type="library" exported="" name="jersey-common-2.0-m12-1" level="project" />
-    <orderEntry type="library" exported="" name="jersey-client-2.0-m09-1" level="project" />
     <orderEntry type="library" exported="" name="javax.ws.rs-api-2.0.1" level="project" />
-    <orderEntry type="library" exported="" name="jersey-media-json-jackson-2.16" level="project" />
     <orderEntry type="library" exported="" name="com.fasterxml.jackson.annotations" level="project" />
     <orderEntry type="library" exported="" name="junit-4.12" level="project" />
   </component>

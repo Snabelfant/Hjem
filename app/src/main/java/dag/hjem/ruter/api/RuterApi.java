@@ -1,78 +1,71 @@
 package dag.hjem.ruter.api;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
+import android.util.Log;
 
-import java.util.Date;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import dag.hjem.rest.Client;
 import dag.hjem.ruter.model.Place;
 import dag.hjem.ruter.model.Stop;
 import dag.hjem.ruter.model.TravelResponse;
-import dag.hjem.model.travelproposal.TravelSearchResult;
 
 /**
  * Created by Dag on 25.02.2015.
  */
 public class RuterApi {
-private WebTarget ruterApi;
+    private Client heartBeatClient = new Client("/heartbeat/index");
+    private Client getStopClient = new Client("/place/getstop/");
+    private Client getTravelsClient = new Client("/travel/gettravels");
+    private Client getPlacesClient = new Client("/place/getplaces");
 
     public RuterApi() {
-        Client client = ClientBuilder.newClient().register(JacksonFeature.class);
-        ruterApi = client.target("http://reisapi.ruter.no");
 
     }
 
-    public boolean heartBeat() {
-        WebTarget target = ruterApi.path("/heartbeat/index");
-        Response response = call(target);
-        checkResponse(response);
-        return "\"Pong\"".equals(response.readEntity(String.class));
+    public boolean heartBeat() throws IOException {
+        String result = heartBeatClient.get(String.class);
+        Log.i("hjem", "rr'" + result + "'");
+        return "Pong".equals(result);
     }
 
-    public Stop getStop(int id) {
-        WebTarget target = ruterApi.path("/Place/GetStop/{id}").resolveTemplate("id", id);
-        Response response = call(target);
-        checkResponse(response);
-        Stop stop = response.readEntity(Stop.class);
+    public Stop getStop(int id) throws IOException {
+        return getStopClient.appendPath(Integer.toString(id)).get(Stop.class);
+    }
 
-        if (stop.getId() != 0 ) {
-            return stop;
+    public List<Place> getPlaces(String partialPlacename) throws IOException {
+        Place[] places = getPlacesClient.appendPath(partialPlacename).queryParam("counties", "Oslo").queryParam("counties", "Akershus").get(Place[].class);
+        return Arrays.asList(places);
+    }
+
+    public TravelResponse getTravels(Integer fromPlaceId, Integer fromX, Integer fromY, Integer toPlaceId, Integer toX, Integer toY, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
+        Client c = getTravelsClient
+                .queryParam("isAfter", isAfter)
+                .queryParam("time", formatDepartureOrArrivalTime(departureOrArrivalTime));
+
+        if (fromPlaceId != null ) {
+            c = c.queryParam("fromplace", fromPlaceId);
+        } else {
+            c = c.encodedQuery("fromPlace=" + toXY(fromX, fromY));
         }
 
-        throw new RuntimeException("Stop.id==0: " + id);
-    }
-
-    public TravelResponse getTravel(Place fromPlace, Place toPlace, boolean isAfter, Date departureOrArrivalTime) {
-        WebTarget target = ruterApi.path("travel/gettravels")
-                .queryParam("fromplace", fromPlace.toParam())
-                .queryParam("toplace", toPlace.toParam())
-                .queryParam("isafter", isAfter)
-//                .queryParam("time", new SimpleDateFormat("ddMMYYYYhhmmss").format(departureOrArrivalTime))
-                ;
-//                = & changemargin = {changemargin} & changepunish = {changepunish} & walkingfactor = {walkingfactor} & proposals = {proposals} & transporttypes = {transporttypes} & maxwalkingminutes = {maxwalkingminutes} & linenames = {linenames};
-        Response response = call(target);
-
-        TravelResponse travelResponse = response.readEntity(TravelResponse.class);
-
-        if (travelResponse.getReisError() != null) {
-            throw new RuntimeException(travelResponse.getReisError().getDescription());
+        if (toPlaceId != null) {
+            c = c.queryParam("toplace", toPlaceId);
+        }else {
+            c = c.encodedQuery("toPlace="+ toXY(toX, toY));
         }
-        return travelResponse;
+
+        return c.get(TravelResponse.class);
     }
 
-    private Response call(WebTarget target) {
-        return target.request(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE).get();
+    private String toXY(int x, int y) {
+        return "(X=" + x + ",Y=" + y + ")";
     }
 
-    private void checkResponse(Response response) {
-        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new RuntimeException(response.toString());
-        }
+    private String formatDepartureOrArrivalTime(Calendar departureOrArrivalTime) {
+        return new SimpleDateFormat("ddMMyyyyHHmmss").format(departureOrArrivalTime.getTime());
     }
-
- }
+}

@@ -1,17 +1,22 @@
 package dag.hjem.ruter.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Stop {
     private int id;
     private String name;
-    private Location location;
+    private int x;
+    private int y;
     private String zone;
     private String shortName;
     private boolean isHub;
     private String district;
-    private String placeType;
+    private PlaceType placeType;
+    private int walkingMinutes;
 
+
+    @JsonCreator
     public Stop(@JsonProperty("ID") int id,
                 @JsonProperty("Name") String name,
                 @JsonProperty("X") int x,
@@ -20,15 +25,18 @@ public class Stop {
                 @JsonProperty("ShortName") String shortName,
                 @JsonProperty("IsHub") boolean isHub,
                 @JsonProperty("District") String district,
-                @JsonProperty("PlaceType") String placeType) {
+                @JsonProperty("PlaceType") PlaceType placeType,
+                @JsonProperty("WalkingMinutes") int walkingMinutes) {
         this.id = id;
         this.name = name;
-        this.location = new Location(x, y);
+        this.x = x;
+        this.y = y;
         this.zone = zone;
         this.shortName = shortName;
         this.isHub = isHub;
         this.district = district;
         this.placeType = placeType;
+        this.walkingMinutes = walkingMinutes;
     }
 
     public String getName() {
@@ -43,7 +51,8 @@ public class Stop {
     @Override
     public String toString() {
         return "Stop{" +
-                "l=" + location +
+                "x=" + x +
+                ", y=" + y +
                 ", zone='" + zone + '\'' +
                 ", shortName='" + shortName + '\'' +
                 ", isHub=" + isHub +

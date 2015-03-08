@@ -1,22 +1,19 @@
 package dag.hjem.model.travelproposal;
 
-import dag.hjem.model.travelproposal.Duration;
 import dag.hjem.model.travelproposal.Section;
 
-import static dag.hjem.model.travelproposal.Util.formatDuration;
-
 public class WalkingSection extends Section {
-    private Duration walkingTime;
+    private int walkingTime;
 
-    public WalkingSection(Duration walkingTime) {
+    public WalkingSection(int walkingTime) {
         this.walkingTime = walkingTime;
     }
 
-    public Duration getWalkingTime() {
+    public int getWalkingTime() {
         return walkingTime;
     }
 
     public String toString() {
-        return "  - Gå " + formatDuration(walkingTime) + "\n";
+        return "  - Gå " + walkingTime + "\n";
     }
 }
