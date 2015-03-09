@@ -4,12 +4,15 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
+
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 
 import dag.hjem.model.location.Location;
+import dag.hjem.model.location.LocationDAO;
 import dag.hjem.model.location.StopLocation;
 import dag.hjem.model.location.UtmLocation;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
@@ -31,11 +34,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 
 
-    public void testGetPlaces() {
+    @Test
+    public void test() throws IOException {
+        Log.i("hjem", "DAO");
+        LocationDAO dao = new LocationDAO();
+
+        dao.getDepartureLocations();
+        dao.addLocation(null);
     }
 
     @Test
-    public void test() throws IOException {
+    public void test2() throws IOException {
         TravelServiceCollector travelServiceCollector = new TravelServiceCollector() {
             @Override
             public void setTravelSearchResult(TravelSearchResult result) {
@@ -80,6 +89,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Log.i("hjem", "TR2" );
 
         travelService.getPlaces("Bel");
+
+        LocationDAO locationDAO= new LocationDAO();
+        List<Location> locations = locationDAO.getDepartureLocations();
+        travelService.getTravelProposals(locations.get(0), locations.get(1), true, Calendar.getInstance());
 
         try {
             Thread.sleep(10000);

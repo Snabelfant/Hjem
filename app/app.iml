@@ -92,7 +92,6 @@
     <orderEntry type="library" exported="" name="xjackson-core-asl-1.9.13" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="javax.ws.rs-api-2.0.1" level="project" />
-    <orderEntry type="library" exported="" name="com.fasterxml.jackson.annotations" level="project" />
     <orderEntry type="library" exported="" name="junit-4.12" level="project" />
   </component>
 </module>

@@ -136,7 +136,7 @@ private RuterApi ruterApi = new RuterApi();
 //        list.add(new StopLocation("Bryn kirke", new Stop()));
 //        list.add(new StopLocation("Gardermoen", new Stop()));
 //        list.add(new StopLocation("Jobb", new Stop()));
-        list.add(new UtmLocation("Øvingshotellet", new UtmPosition(0, "32", 512000, 6000001)));
+        list.add(new UtmLocation("Øvingshotellet",  512000, 6000001));
         return list;
     }
 

@@ -5,6 +5,6 @@ package dag.hjem.model.location;
  */
 public class Here extends UtmLocation {
     public Here(String name) {
-        super(name, null);
+        super(name, 0,0);
     }
 }
