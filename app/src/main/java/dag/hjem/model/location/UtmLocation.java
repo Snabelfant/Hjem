@@ -3,8 +3,6 @@ package dag.hjem.model.location;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import dag.hjem.gps.UtmPosition;
-
 /**
  * Created by Dag on 22.02.2015.
  */
@@ -28,8 +26,7 @@ public class UtmLocation extends Location {
     }
 
 
-    @Override
-    public String toString() {
+    public String xtoString() {
         return "UtmLocation{" +
                 "name=" + getName() +
                 ", x=" + x +

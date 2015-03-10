@@ -15,8 +15,7 @@ public class StopLocation extends Location {
         this.district = district;
     }
 
-    @Override
-    public String toString() {
+    public String xtoString() {
         return "StopLocation{" +
                 "name=" + super.getName() +
                 ", ruterId=" + ruterId +

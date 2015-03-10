@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:background="#fffffde7"
         android:layout_below="@+id/til"
+        android:background="#fffffde7"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -23,15 +23,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
         <Spinner
+            android:id="@+id/fromSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fromSpinner"
             android:spinnerMode="dropdown" />
 
          <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/toSpinner"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
             android:spinnerMode="dropdown" />
         </LinearLayout>
 
@@ -41,31 +41,31 @@
             android:orientation="vertical">
 
         <Spinner
+            android:id="@+id/timeDirectionSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/timeDirectionSpinner"
             android:spinnerMode="dropdown" />
 
         <Spinner
+            android:id="@+id/timeOptionsSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/timeOptionsSpinner"
             android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <Button
+            android:id="@+id/find"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/find"
             android:text="Finn"/>
 
         <Button
+            android:id="@+id/gpsPosition"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/gpsPosition"
             android:background="#fffff9c4"
-            android:textSize="15sp"
-            android:text="Finn"/>
+            android:text="Finn"
+            android:textSize="15sp" />
 
     </LinearLayout>
 

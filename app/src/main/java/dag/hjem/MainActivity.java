@@ -1,8 +1,8 @@
 package dag.hjem;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,20 +11,24 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dag.hjem.model.TimeOption;
-import dag.hjem.model.TimeDirection;
-import dag.hjem.model.location.Location;
-import dag.hjem.model.location.UtmLocation;
-import dag.hjem.ruter.api.RuterApi;
 import dag.hjem.gps.GpsObserver;
 import dag.hjem.gps.Positioning;
 import dag.hjem.gps.UtmPosition;
+import dag.hjem.model.TimeDirection;
+import dag.hjem.model.TimeOption;
+import dag.hjem.model.location.Location;
+import dag.hjem.model.location.StopLocation;
+import dag.hjem.model.location.UtmLocation;
+import dag.hjem.model.travelproposal.PlaceSearchResult;
+import dag.hjem.model.travelproposal.TravelSearchResult;
+import dag.hjem.ruter.api.RuterApi;
+import dag.hjem.service.TravelService;
+import dag.hjem.service.TravelServiceCollector;
 
-
+// 6687 bilder
 public class MainActivity extends ActionBarActivity {
     private Spinner fromSpinner;
     private Spinner toSpinner;
@@ -38,7 +42,7 @@ private RuterApi ruterApi = new RuterApi();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mainactivity);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
@@ -55,14 +59,18 @@ private RuterApi ruterApi = new RuterApi();
         findButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean b = false;
-                try {
-                    b = ruterApi.heartBeat();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.i("hjem", Boolean.toString(b));
-                Toast.makeText(MainActivity.this, Boolean.toString(b), Toast.LENGTH_LONG);
+                TravelService travelService = new TravelService(new RuterApi(), new TravelServiceCollector() {
+                    @Override
+                    public void setTravelSearchResult(TravelSearchResult result) {
+
+                    }
+
+                    @Override
+                    public void setPlaceSearchResult(PlaceSearchResult result) {
+
+                    }
+                });
+                Toast.makeText(MainActivity.this, "Finn tider...", Toast.LENGTH_LONG);
             }
         });
 //        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -133,9 +141,8 @@ private RuterApi ruterApi = new RuterApi();
     }
     private List<Location> getLocations() {
         List<Location> list = new ArrayList<>();
-//        list.add(new StopLocation("Bryn kirke", new Stop()));
-//        list.add(new StopLocation("Gardermoen", new Stop()));
-//        list.add(new StopLocation("Jobb", new Stop()));
+        list.add(new StopLocation("Bryn kirke", "Bærum", 11111));
+        list.add(new StopLocation("Gardermoen", "Jessheim", 23456));
         list.add(new UtmLocation("Øvingshotellet",  512000, 6000001));
         return list;
     }
@@ -143,19 +150,22 @@ private RuterApi ruterApi = new RuterApi();
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.mainactivitymenu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.mainactivitymenu_add_place) {
+            Intent addPlaceActivityIntent = new Intent(this, AddPlaceActivity.class);
+            this.startActivity(addPlaceActivityIntent);
+            return true;
+        }
+
+        if (id == R.id.mainactivitymenu_settings) {
+            Toast.makeText(this, "kanskje senere...", Toast.LENGTH_LONG).show();
             return true;
         }
 
