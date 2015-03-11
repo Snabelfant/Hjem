@@ -47,9 +47,9 @@ private RuterApi ruterApi = new RuterApi();
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
 
-        Button gpsPositionButton =  (Button) findViewById(R.id.gpsPosition);
-        GpsObserver gpsObserver = new GpsObserverImpl(gpsPositionButton);
-        positioning = new Positioning(this, gpsObserver);
+//        Button gpsPositionButton =  (Button) findViewById(R.id.gpsPosition);
+//        GpsObserver gpsObserver = new GpsObserverImpl(gpsPositionButton);
+//        positioning = new Positioning(this, gpsObserver);
         initInputs();
 
         addListeners();

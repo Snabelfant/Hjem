@@ -1,19 +1,72 @@
 package dag.hjem;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+
+import dag.hjem.model.travelproposal.PlaceSearchResult;
+import dag.hjem.model.travelproposal.TravelSearchResult;
+import dag.hjem.ruter.api.RuterApi;
+import dag.hjem.service.TravelService;
+import dag.hjem.service.TravelServiceCollector;
 
 public class AddPlaceActivity extends Activity {
 //    private ListView varelisteView;
 //    private VarelisteAdapter varelisteAdapter;
 //    private EndreVareDialogFragment endreVareDialogFragment;
 
+    private TravelService travelService;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.addplaceactivity);
+
+        EditText searchTermView = (EditText) findViewById(R.id.placesearchterm);
+//        searchTermView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+
+        final TextView result = (TextView) findViewById(R.id.tmpsearchresult);
+
+        searchTermView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (true /*actionId == EditorInfo.IME_ACTION_SEARCH*/) {
+                    String searchTerm = textView.getText().toString().trim();
+
+                    if (!"".equals(searchTerm)) {
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+
+                        try {
+                            travelService.getPlaces(searchTerm);
+                        } catch (IOException e) {
+                            result.setText(e.toString());
+                        }
+
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        PlaceSearchColletor placeSearchColletor = new PlaceSearchColletor(result);
+        travelService = new TravelService(new RuterApi(), placeSearchColletor);
+        setContentView(R.layout.addplaceactivity);
+
 //        this.varelisteView = (ListView) findViewById(R.id.vareliste);
 //        varelisteAdapter = VarelisteAdapter.opprett(this);
 //
@@ -103,5 +156,24 @@ public class AddPlaceActivity extends Activity {
 //        }
 //    }
 
+    private class PlaceSearchColletor implements TravelServiceCollector {
+        private TextView resultView;
+
+        public PlaceSearchColletor(TextView resultView) {
+            this.resultView = resultView;
+        }
+
+        @Override
+        public void setTravelSearchResult(TravelSearchResult result) {
+
+        }
+
+        @Override
+        public void setPlaceSearchResult(PlaceSearchResult result) {
+            Toast.makeText(AddPlaceActivity.this, "S=" + result.toString(), Toast.LENGTH_LONG).show();
+
+            resultView.setText(result.toString());
+        }
+    }
 }
 

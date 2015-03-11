@@ -19,9 +19,17 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:bufferType="editable"
-            android:inputType="text"></EditText>
+            android:imeOptions="actionSearch"
+            android:inputType="text" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tmpsearchresult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resultat" />
+
 
     <ListView
         android:id="@+id/placesfound"

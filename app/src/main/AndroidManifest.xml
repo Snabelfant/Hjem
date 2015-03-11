@@ -22,7 +22,8 @@
         </activity>
         <activity
             android:name=".AddPlaceActivity"
-            android:label="Nytt sted"></activity>
+            android:label="Nytt sted"
+            android:screenOrientation="portrait"></activity>
 
     </application>
 

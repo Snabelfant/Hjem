@@ -1,11 +1,11 @@
 package dag.hjem.rest;
 
 import android.net.Uri;
+import android.util.Log;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by Dag on 06.03.2015.
@@ -65,7 +65,9 @@ public class Client {
         String url = uriBuilder.build().toString();
         url += encodedQueries.toString();
         clear();
+        Log.i("hjem", url);
         String content = UrlReader.get(url);
+        Log.i("hjem", content);
         return mapper.readValue(content, c);
     }
 
