@@ -23,6 +23,14 @@ public class PlaceSearchResult {
         return searchResult;
     }
 
+    public Exception getException() {
+        return exception;
+    }
+
+    public List<Place> getPlaces() {
+        return places;
+    }
+
     @Override
     public String toString() {
         return "PlaceSearchResult{" +

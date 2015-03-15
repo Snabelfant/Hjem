@@ -9,9 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import dag.hjem.model.location.Location;
-import dag.hjem.model.location.StopLocation;
+import dag.hjem.model.location.RuterLocation;
 import dag.hjem.model.location.UtmLocation;
-import dag.hjem.model.travelproposal.Place;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.ruter.api.RuterApi;
@@ -68,7 +67,7 @@ public class TravelService {
             protected PlaceSearchResult doInBackground(String... params) {
                 String partialName = params[0];
                 try {
-                    List<dag.hjem.ruter.model.Place> ruterPlaceSearchResult  = ruterApi.getPlaces(partialName);
+                    List<dag.hjem.ruter.model.Place> ruterPlaceSearchResult = ruterApi.getPlaces(partialName);
                     return PlaceSearchResult.fromRuter(ruterPlaceSearchResult);
                 } catch (IOException e) {
                     return PlaceSearchResult.fromException(e);
@@ -100,15 +99,15 @@ public class TravelService {
         protected GetTravelProposalsParams(Location fromLocation, Location toLocation, boolean isAfter, Calendar departureOrArrivalTime) {
             fromName = fromLocation.getName();
             toName = toLocation.getName();
-            if (fromLocation instanceof StopLocation) {
-                fromId = ((StopLocation) fromLocation).getRuterId();
+            if (fromLocation instanceof RuterLocation) {
+                fromId = ((RuterLocation) fromLocation).getRuterId();
             } else {
                 fromX = ((UtmLocation) fromLocation).getX();
                 fromY = ((UtmLocation) fromLocation).getY();
             }
 
-            if (toLocation instanceof StopLocation) {
-                toId = ((StopLocation) toLocation).getRuterId();
+            if (toLocation instanceof RuterLocation) {
+                toId = ((RuterLocation) toLocation).getRuterId();
             } else {
                 toX = ((UtmLocation) toLocation).getX();
                 toY = ((UtmLocation) toLocation).getY();

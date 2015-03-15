@@ -3,6 +3,7 @@ package dag.hjem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 import dag.hjem.gps.GpsObserver;
@@ -20,24 +21,24 @@ import dag.hjem.gps.UtmPosition;
 import dag.hjem.model.TimeDirection;
 import dag.hjem.model.TimeOption;
 import dag.hjem.model.location.Location;
-import dag.hjem.model.location.StopLocation;
-import dag.hjem.model.location.UtmLocation;
+import dag.hjem.model.location.Locations;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.ruter.api.RuterApi;
 import dag.hjem.service.TravelService;
 import dag.hjem.service.TravelServiceCollector;
 
-// 6687 bilder
 public class MainActivity extends ActionBarActivity {
     private Spinner fromSpinner;
     private Spinner toSpinner;
     private Spinner timeDirectionSpinner;
     private Spinner timeOptionSpinner;
-    private Button  findButton;
+    private Button findButton;
 
     private Positioning positioning;
-private RuterApi ruterApi = new RuterApi();
+    private RuterApi ruterApi;
+    private UtmPosition lastKnownGpsPosition;
+    private Locations locations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +48,35 @@ private RuterApi ruterApi = new RuterApi();
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
 
-//        Button gpsPositionButton =  (Button) findViewById(R.id.gpsPosition);
-//        GpsObserver gpsObserver = new GpsObserverImpl(gpsPositionButton);
-//        positioning = new Positioning(this, gpsObserver);
+        lastKnownGpsPosition = null;
+        GpsObserver gpsObserver = new GpsObserverImpl();
+        positioning = new Positioning(this, gpsObserver);
+
+        ruterApi = new RuterApi();
+
+        findButton = (Button) findViewById(R.id.finddepartures);
+        fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
+        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this,
+                R.layout.spinner_layout);
+        fromAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        fromSpinner.setAdapter(fromAdapter);
+
+        toSpinner = (Spinner) findViewById(R.id.toSpinner);
+        ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
+                R.layout.spinner_layout);
+        toAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        toSpinner.setAdapter(toAdapter);
+
+        locations = new Locations(getApplicationContext());
+
+        updateLocationSpinners();
         initInputs();
 
         addListeners();
     }
 
     private void addListeners() {
-        findButton.setOnClickListener( new View.OnClickListener() {
+        findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TravelService travelService = new TravelService(new RuterApi(), new TravelServiceCollector() {
@@ -93,30 +113,6 @@ private RuterApi ruterApi = new RuterApi();
     }
 
     private void initInputs() {
-        findButton = (Button) findViewById(R.id.find);
-
-        List<Location> locations = getLocations();
-
-        fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
-        List<Location> from = new ArrayList<>(locations);
-        from.add(0, Location.FROM_HERE);
-        from.add(1, Location.HJEM);
-
-        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout, from);
-        fromAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        fromSpinner.setAdapter(fromAdapter);
-
-        toSpinner = (Spinner) findViewById(R.id.toSpinner);
-        List<Location> to = new ArrayList<>(locations);
-        to.add(0, Location.HJEM);
-        to.add(Location.TO_HERE);
-
-        ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout, to);
-        toAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        toSpinner.setAdapter(toAdapter);
-
         timeDirectionSpinner = (Spinner) findViewById(R.id.timeDirectionSpinner);
         ArrayAdapter<TimeDirection> timeDirectionAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_layout, TimeDirection.asList());
@@ -139,17 +135,16 @@ private RuterApi ruterApi = new RuterApi();
             return TimeOption.getTimesBefore();
         }
     }
-    private List<Location> getLocations() {
-        List<Location> list = new ArrayList<>();
-        list.add(new StopLocation("Bryn kirke", "Bærum", 11111));
-        list.add(new StopLocation("Gardermoen", "Jessheim", 23456));
-        list.add(new UtmLocation("Øvingshotellet",  512000, 6000001));
-        return list;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        updateLocationSpinners();
+        Log.i("hjem", "Tilbake=" + data);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.mainactivitymenu, menu);
         return true;
     }
@@ -160,7 +155,7 @@ private RuterApi ruterApi = new RuterApi();
 
         if (id == R.id.mainactivitymenu_add_place) {
             Intent addPlaceActivityIntent = new Intent(this, AddPlaceActivity.class);
-            this.startActivity(addPlaceActivityIntent);
+            this.startActivityForResult(addPlaceActivityIntent, 12345);
             return true;
         }
 
@@ -172,15 +167,27 @@ private RuterApi ruterApi = new RuterApi();
         return super.onOptionsItemSelected(item);
     }
 
-    private static class GpsObserverImpl implements GpsObserver {
-        private Button button;
-
-        public GpsObserverImpl(Button button) {
-            this.button = button;
+    private void updateLocationSpinners() {
+        try {
+            updateLocationSpinner(fromSpinner, locations.getDepartureLocations());
+            updateLocationSpinner(toSpinner, locations.getArrivalLocations());
+        } catch (IOException e) {
+            YesNoCancel.show(this, "Oi!", e.toString(), YesNoCancel.EMPTY, null, null);
         }
+    }
+
+    private void updateLocationSpinner(Spinner spinner, List<Location> locations) {
+        ArrayAdapter<Location> adapter = ((ArrayAdapter<Location>) spinner.getAdapter());
+        adapter.clear();
+        adapter.addAll(locations);
+    }
+
+    private class GpsObserverImpl implements GpsObserver {
+
         @Override
         public void positionChanged(UtmPosition position) {
-            button.setText(position.getUtmEast() + "\n" + position.getUtmNorth() + "\n" + position.getTime());
+            lastKnownGpsPosition = position;
+            Log.i("hjem", position.getUtmEast() + " " + position.getUtmNorth() + " " + position.getTime());
         }
     }
 }

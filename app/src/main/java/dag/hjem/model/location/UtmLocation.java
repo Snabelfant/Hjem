@@ -11,7 +11,7 @@ public class UtmLocation extends Location {
     private int y;
 
 
-    public UtmLocation(@JsonProperty("Name") String name, @JsonProperty("X") int x, @JsonProperty("Y") int y) {
+    public UtmLocation(@JsonProperty("Navn") String name, @JsonProperty("X") int x, @JsonProperty("Y") int y) {
         super(name);
         this.x = x;
         this.y = y;

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
-
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,8 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import dag.hjem.model.location.Location;
-import dag.hjem.model.location.LocationDAO;
-import dag.hjem.model.location.StopLocation;
+import dag.hjem.model.location.LocationDaoImpl;
 import dag.hjem.model.location.UtmLocation;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
@@ -37,7 +35,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     @Test
     public void test() throws IOException {
         Log.i("hjem", "DAO");
-        LocationDAO dao = new LocationDAO();
+        LocationDaoImpl dao = new LocationDaoImpl();
 
         dao.getDepartureLocations();
         dao.addLocation(null);
@@ -83,15 +81,15 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 //        travelService.getTravelProposals(from, to, true, Calendar.getInstance());
 //        Log.i("hjem", "TR1");
 
-       Location to = new UtmLocation("kr",597894,6647727);
+        Location to = new UtmLocation("kr", 597894, 6647727);
         travelService.getTravelProposals(Location.HJEM, to, true, Calendar.getInstance());
 
-        Log.i("hjem", "TR2" );
+        Log.i("hjem", "TR2");
 
         travelService.getPlaces("Bel");
 
-        LocationDAO locationDAO= new LocationDAO();
-        List<Location> locations = locationDAO.getDepartureLocations();
+        LocationDaoImpl locationDaoImpl = new LocationDaoImpl();
+        List<Location> locations = locationDaoImpl.getDepartureLocations();
         travelService.getTravelProposals(locations.get(0), locations.get(1), true, Calendar.getInstance());
 
         try {

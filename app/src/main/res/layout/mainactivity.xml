@@ -24,10 +24,10 @@
             android:layout_height="match_parent"
             android:spinnerMode="dropdown" />
 
-         <Spinner
+        <Spinner
             android:id="@+id/toSpinner"
-             android:layout_width="wrap_content"
-             android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:spinnerMode="dropdown" />
 
         <Spinner
@@ -43,7 +43,7 @@
             android:spinnerMode="dropdown" />
 
         <Button
-            android:id="@+id/find"
+            android:id="@+id/finddepartures"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Kjøyr" />

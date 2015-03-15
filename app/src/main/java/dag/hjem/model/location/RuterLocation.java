@@ -5,11 +5,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 /**
  * Created by Dag on 22.02.2015.
  */
-public class StopLocation extends Location {
+public class RuterLocation extends Location {
     private int ruterId;
     private String district;
 
-    public StopLocation(@JsonProperty("Name") String name, @JsonProperty("District") String district, @JsonProperty("RuterId") int ruterId) {
+    public RuterLocation(@JsonProperty("Navn") String name, @JsonProperty("Område") String district, @JsonProperty("RuterId") int ruterId) {
         super(name);
         this.ruterId = ruterId;
         this.district = district;
