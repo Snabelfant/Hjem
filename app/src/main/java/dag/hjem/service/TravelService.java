@@ -18,13 +18,12 @@ import dag.hjem.ruter.model.TravelResponse;
 
 public class TravelService {
     private RuterApi ruterApi;
-    private TravelSearchCollector travelSearchCollector;
-    private PlaceSearchCollector placeSearchCollector;
+    private TravelServiceCollector travelServiceCollector;
     private ExecutorService executorService;
 
-    public TravelService(RuterApi ruterApi, TravelSearchCollector travelSearchCollector,) {
+    public TravelService(RuterApi ruterApi, TravelServiceCollector travelServiceCollector) {
         this.ruterApi = ruterApi;
-        this.travelSearchCollector = travelSearchCollector;
+        this.travelServiceCollector = travelServiceCollector;
         this.executorService = Executors.newSingleThreadExecutor();
 
     }
@@ -35,8 +34,6 @@ public class TravelService {
 
     public void getTravelProposals(Location fromLocation, Location toLocation, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
         GetTravelProposalsParams params = new GetTravelProposalsParams(fromLocation, toLocation, isAfter, departureOrArrivalTime);
-
-
         AsyncTask<GetTravelProposalsParams, Integer, TravelSearchResult> task = new AsyncTask<GetTravelProposalsParams, Integer, TravelSearchResult>() {
 
             @Override
@@ -53,7 +50,7 @@ public class TravelService {
 
             @Override
             protected void onPostExecute(TravelSearchResult result) {
-                travelSearchCollector.setTravelSearchResult(result);
+                travelServiceCollector.setTravelSearchResult(result);
             }
         };
 
@@ -77,7 +74,7 @@ public class TravelService {
 
             @Override
             protected void onPostExecute(PlaceSearchResult result) {
-                travelSearchCollector.setPlaceSearchResult(result);
+                travelServiceCollector.setPlaceSearchResult(result);
             }
         };
 
