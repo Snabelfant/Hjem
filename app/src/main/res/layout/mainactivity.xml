@@ -31,12 +31,6 @@
             android:spinnerMode="dropdown" />
 
         <Spinner
-            android:id="@+id/timeDirectionSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown" />
-
-        <Spinner
             android:id="@+id/timeOptionsSpinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

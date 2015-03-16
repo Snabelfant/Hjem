@@ -42,11 +42,6 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     private List<Location> loadLocations() throws IOException {
-        String json = "[" +
-                "{\"Type\":\"stopp\",\"Navn\":\"Jobb\", \"RuterId\":1000027557}," +
-                "{\"Type\":\"utm\",\"Navn\":\"Kristian\", \"x\":597894, \"y\":6647727}" +
-                "]";
-
         ObjectMapper mapper = new ObjectMapper();
         Location[] locations;
         File file = Util.getExternalFile(context, "Steder.json");

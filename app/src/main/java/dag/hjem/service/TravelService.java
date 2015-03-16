@@ -18,12 +18,13 @@ import dag.hjem.ruter.model.TravelResponse;
 
 public class TravelService {
     private RuterApi ruterApi;
-    private TravelServiceCollector travelServiceCollector;
+    private TravelSearchCollector travelSearchCollector;
+    private PlaceSearchCollector placeSearchCollector;
     private ExecutorService executorService;
 
-    public TravelService(RuterApi ruterApi, TravelServiceCollector travelServiceCollector) {
+    public TravelService(RuterApi ruterApi, TravelSearchCollector travelSearchCollector,) {
         this.ruterApi = ruterApi;
-        this.travelServiceCollector = travelServiceCollector;
+        this.travelSearchCollector = travelSearchCollector;
         this.executorService = Executors.newSingleThreadExecutor();
 
     }
@@ -52,7 +53,7 @@ public class TravelService {
 
             @Override
             protected void onPostExecute(TravelSearchResult result) {
-                travelServiceCollector.setTravelSearchResult(result);
+                travelSearchCollector.setTravelSearchResult(result);
             }
         };
 
@@ -76,7 +77,7 @@ public class TravelService {
 
             @Override
             protected void onPostExecute(PlaceSearchResult result) {
-                travelServiceCollector.setPlaceSearchResult(result);
+                travelSearchCollector.setPlaceSearchResult(result);
             }
         };
 

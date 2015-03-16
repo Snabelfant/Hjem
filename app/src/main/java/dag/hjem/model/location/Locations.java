@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dag.hjem.gps.UtmPosition;
 import dag.hjem.model.travelproposal.Place;
 
 public class Locations {
@@ -31,6 +32,11 @@ public class Locations {
 
     public void addPlace(Place place) throws IOException {
         Location location = new RuterLocation(place.getName(), place.getDistrict(), place.getRuterId());
+        locationDao.addLocation(location);
+    }
+
+    public void addUtmPosition(UtmPosition position, String name) throws IOException {
+        Location location = new UtmLocation(name, position.getUtmEast(), position.getUtmNorth());
         locationDao.addLocation(location);
     }
 }

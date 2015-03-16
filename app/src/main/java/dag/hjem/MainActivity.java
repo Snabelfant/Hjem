@@ -3,7 +3,6 @@ package dag.hjem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +17,13 @@ import java.util.List;
 import dag.hjem.gps.GpsObserver;
 import dag.hjem.gps.Positioning;
 import dag.hjem.gps.UtmPosition;
-import dag.hjem.model.TimeDirection;
 import dag.hjem.model.TimeOption;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.Locations;
-import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.ruter.api.RuterApi;
+import dag.hjem.service.TravelSearchCollector;
 import dag.hjem.service.TravelService;
-import dag.hjem.service.TravelServiceCollector;
 
 public class MainActivity extends ActionBarActivity {
     private Spinner fromSpinner;
@@ -67,10 +64,16 @@ public class MainActivity extends ActionBarActivity {
         toAdapter.setDropDownViewResource(R.layout.spinner_layout);
         toSpinner.setAdapter(toAdapter);
 
+        timeOptionSpinner = (Spinner) findViewById(R.id.timeOptionsSpinner);
+        List<TimeOption> timeOptions = TimeOption.getTimes();
+        ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<>(this,
+                R.layout.spinner_layout, timeOptions);
+        timeOptionAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        timeOptionSpinner.setAdapter(timeOptionAdapter);
+
         locations = new Locations(getApplicationContext());
 
         updateLocationSpinners();
-        initInputs();
 
         addListeners();
     }
@@ -79,14 +82,9 @@ public class MainActivity extends ActionBarActivity {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TravelService travelService = new TravelService(new RuterApi(), new TravelServiceCollector() {
+                TravelService travelService = new TravelService(new RuterApi(), new TravelSearchCollector() {
                     @Override
                     public void setTravelSearchResult(TravelSearchResult result) {
-
-                    }
-
-                    @Override
-                    public void setPlaceSearchResult(PlaceSearchResult result) {
 
                     }
                 });
@@ -112,35 +110,11 @@ public class MainActivity extends ActionBarActivity {
 //        });
     }
 
-    private void initInputs() {
-        timeDirectionSpinner = (Spinner) findViewById(R.id.timeDirectionSpinner);
-        ArrayAdapter<TimeDirection> timeDirectionAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout, TimeDirection.asList());
-        timeDirectionAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        timeDirectionSpinner.setAdapter(timeDirectionAdapter);
-        timeDirectionSpinner.setSelection(0);
-
-        timeOptionSpinner = (Spinner) findViewById(R.id.timeOptionsSpinner);
-        List<TimeOption> timeOptions = getTimeSpinnerList((TimeDirection) timeDirectionSpinner.getSelectedItem());
-        ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout, timeOptions);
-        timeOptionAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        timeOptionSpinner.setAdapter(timeOptionAdapter);
-    }
-
-    private List<TimeOption> getTimeSpinnerList(TimeDirection timeDirection) {
-        if (timeDirection == TimeDirection.AFTER) {
-            return TimeOption.getTimesAfter();
-        } else {
-            return TimeOption.getTimesBefore();
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         updateLocationSpinners();
-        Log.i("hjem", "Tilbake=" + data);
+//        Log.i("hjem", "Tilbake=" + data);
     }
 
     @Override
@@ -155,6 +129,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (id == R.id.mainactivitymenu_add_place) {
             Intent addPlaceActivityIntent = new Intent(this, AddPlaceActivity.class);
+            addPlaceActivityIntent.putExtra("gpsposition", lastKnownGpsPosition);
             this.startActivityForResult(addPlaceActivityIntent, 12345);
             return true;
         }
@@ -187,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void positionChanged(UtmPosition position) {
             lastKnownGpsPosition = position;
-            Log.i("hjem", position.getUtmEast() + " " + position.getUtmNorth() + " " + position.getTime());
+//            Log.i("hjem", position.getUtmEast() + " " + position.getUtmNorth() + " " + position.getTime());
         }
     }
 }

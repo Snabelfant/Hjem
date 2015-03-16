@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Dag on 22.02.2015.
  */
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "Type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = RuterLocation.class, name = "stopp"),
         @JsonSubTypes.Type(value = UtmLocation.class, name = "utm")})

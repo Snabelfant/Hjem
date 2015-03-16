@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import dag.hjem.gps.UtmPosition;
 import dag.hjem.model.location.Locations;
 import dag.hjem.model.travelproposal.Place;
 import dag.hjem.ruter.api.RuterApi;
@@ -29,11 +30,16 @@ import dag.hjem.service.TravelService;
 
 public class AddPlaceActivity extends Activity {
     private TravelService travelService;
+    private UtmPosition lastKnownGpsPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addplaceactivity);
+
+        Bundle bundle = getIntent().getExtras();
+        lastKnownGpsPosition = (UtmPosition) bundle.get("gpsposition");
+        Log.i("hjem", "gps=" + lastKnownGpsPosition);
 
         ListView placesFound = (ListView) findViewById(R.id.placesfound);
         final PlaceListAdapter placeListAdapter = new PlaceListAdapter(this);
@@ -43,20 +49,15 @@ public class AddPlaceActivity extends Activity {
         saveGpsPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddPlaceActivity.this, "Lagre gps...", Toast.LENGTH_LONG);
+                Toast.makeText(AddPlaceActivity.this, "Lagre gps...", Toast.LENGTH_LONG).show();
+                Bundle b = new Bundle();
+                b.putSerializable("utmposition", lastKnownGpsPosition);
+                AddPlaceDialogFragment addPlaceDialogFragment = new AddPlaceDialogFragment();
+                addPlaceDialogFragment.setArguments(b);
+                addPlaceDialogFragment.show(getFragmentManager(), "Nytt gps-sted");
             }
         });
-//        saveGpsPosition.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//         @Override
-//         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//             Place selectedPlace = (Place) parent.getAdapter().getItem(position);
-//             Bundle b = new Bundle();
-//             b.putSerializable("place", selectedPlace);
-//             AddPlaceDialogFragment addPlaceDialogFragment = new AddPlaceDialogFragment();
-//             addPlaceDialogFragment.setArguments(b);
-//             addPlaceDialogFragment.show(getFragmentManager(), "Nytt sted");
-//         }
-//     });
+
 
         travelService = new TravelService(new RuterApi(), placeListAdapter);
 
@@ -115,6 +116,7 @@ public class AddPlaceActivity extends Activity {
             Bundle bundle = getArguments();
 
             final Place newPlace = (Place) bundle.get("place");
+            final UtmPosition newUtmPosition = (UtmPosition) bundle.get("utmposition");
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -123,16 +125,26 @@ public class AddPlaceActivity extends Activity {
             builder.setView(addPlaceView);
 
             final TextView name = (TextView) addPlaceView.findViewById(R.id.addplace_newname);
-            name.setText(newPlace.getName());
+
+            if (newPlace != null) {
+                name.setText(newPlace.getName());
+            } else {
+                name.setText(newUtmPosition.getUtmNorth() + "/" + newUtmPosition.getUtmEast());
+            }
+
             name.setSelected(true);
 
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-
                     try {
-                        newPlace.setName(name.getText().toString());
                         Locations locations = new Locations(getActivity());
-                        locations.addPlace(newPlace);
+
+                        if (newPlace != null) {
+                            newPlace.setName(name.getText().toString());
+                            locations.addPlace(newPlace);
+                        } else {
+                            locations.addUtmPosition(newUtmPosition, name.getText().toString());
+                        }
                     } catch (Exception e) {
                         Log.e("hjem", "Feil: " + e.toString());
                         YesNoCancel.show(getActivity(), "Oi!!", e.getMessage(), YesNoCancel.EMPTY, null, null);
