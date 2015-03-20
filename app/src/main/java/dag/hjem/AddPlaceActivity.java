@@ -58,7 +58,7 @@ public class AddPlaceActivity extends Activity {
             }
         });
 
-
+        saveGpsPosition.setEnabled(lastKnownGpsPosition != null);
         travelService = new TravelService(new RuterApi(), placeListAdapter);
 
         EditText searchTermView = (EditText) findViewById(R.id.placesearchterm);

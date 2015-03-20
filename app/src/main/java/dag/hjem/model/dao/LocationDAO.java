@@ -1,4 +1,4 @@
-package dag.hjem.model.location;
+package dag.hjem.model.dao;
 
 import android.util.Log;
 
@@ -8,6 +8,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
+
+import dag.hjem.model.location.Location;
 
 /**
  * Created by Dag on 09.03.2015.

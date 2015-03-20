@@ -48,6 +48,10 @@ public class TimeOption {
         return timeOptions;
     }
 
+    public TimeDirection getTimeDirection() {
+        return timeDirection;
+    }
+
     public Calendar getTime() {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.MINUTE, offsetInMinutes);

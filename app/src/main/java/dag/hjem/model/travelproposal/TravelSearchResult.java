@@ -32,6 +32,14 @@ public class TravelSearchResult {
         return travelSearchResult;
     }
 
+    public Exception getException() {
+        return exception;
+    }
+
+    public List<Travel> getTravelProposals() {
+        return travelProposals;
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder("*** " + from + " -> " + to + " ***\n");
 

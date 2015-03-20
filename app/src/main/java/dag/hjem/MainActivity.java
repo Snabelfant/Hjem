@@ -2,7 +2,10 @@ package dag.hjem;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,21 +20,22 @@ import java.util.List;
 import dag.hjem.gps.GpsObserver;
 import dag.hjem.gps.Positioning;
 import dag.hjem.gps.UtmPosition;
+import dag.hjem.model.TimeDirection;
 import dag.hjem.model.TimeOption;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.Locations;
+import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.ruter.api.RuterApi;
-import dag.hjem.service.TravelSearchCollector;
 import dag.hjem.service.TravelService;
+import dag.hjem.service.TravelServiceCollector;
 
 public class MainActivity extends ActionBarActivity {
+    ViewPager travelProposalPager;
     private Spinner fromSpinner;
     private Spinner toSpinner;
-    private Spinner timeDirectionSpinner;
     private Spinner timeOptionSpinner;
     private Button findButton;
-
     private Positioning positioning;
     private RuterApi ruterApi;
     private UtmPosition lastKnownGpsPosition;
@@ -71,27 +75,53 @@ public class MainActivity extends ActionBarActivity {
         timeOptionAdapter.setDropDownViewResource(R.layout.spinner_layout);
         timeOptionSpinner.setAdapter(timeOptionAdapter);
 
+        travelProposalPager = (ViewPager) findViewById(R.id.travelproposalpager);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        final TravelProposalAdapter travelProposalAdapter = new TravelProposalAdapter(fragmentManager);
+        travelProposalPager.setAdapter(travelProposalAdapter);
+
         locations = new Locations(getApplicationContext());
 
         updateLocationSpinners();
 
-        addListeners();
-    }
-
-    private void addListeners() {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TravelService travelService = new TravelService(new RuterApi(), new TravelSearchCollector() {
+
+                TravelService travelService = new TravelService(new RuterApi(), new TravelServiceCollector() {
                     @Override
                     public void setTravelSearchResult(TravelSearchResult result) {
+                        Log.i("hjem", "TR=" + result.toString());
+                        if (result.getException() != null) {
+                            YesNoCancel.show(getApplicationContext(), "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
+                        } else {
+                            travelProposalAdapter.setTravelProposals(result.getTravelProposals());
+                            travelProposalPager.invalidate();
+                        }
+                    }
+
+                    @Override
+                    public void setPlaceSearchResult(PlaceSearchResult result) {
 
                     }
                 });
-                Toast.makeText(MainActivity.this, "Finn tider...", Toast.LENGTH_LONG);
+
+                Location fromLocation = (Location) fromSpinner.getSelectedItem();
+                Location toLocation = (Location) toSpinner.getSelectedItem();
+                TimeOption timeOption = (TimeOption) timeOptionSpinner.getSelectedItem();
+                boolean isAfter = TimeDirection.AFTER.equals(timeOption.getTimeDirection());
+                try {
+                    travelService.getTravelProposals(fromLocation, toLocation, isAfter, timeOption.getTime());
+                } catch (IOException e) {
+                    YesNoCancel.show(getApplicationContext(), "Oi!", e.toString(), YesNoCancel.EMPTY, null, null);
+                }
             }
         });
-//        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+    }
+
+//    private void addListeners() {
+    //        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 //                TimeDirection timeDirection = (TimeDirection) parentView.getItemAtPosition(position);
@@ -108,7 +138,7 @@ public class MainActivity extends ActionBarActivity {
 //            }
 //
 //        });
-    }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -162,7 +192,6 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void positionChanged(UtmPosition position) {
             lastKnownGpsPosition = position;
-//            Log.i("hjem", position.getUtmEast() + " " + position.getUtmNorth() + " " + position.getTime());
         }
     }
 }
