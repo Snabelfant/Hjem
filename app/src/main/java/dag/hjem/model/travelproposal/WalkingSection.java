@@ -1,7 +1,5 @@
 package dag.hjem.model.travelproposal;
 
-import dag.hjem.model.travelproposal.Section;
-
 public class WalkingSection extends Section {
     private int walkingTime;
 
@@ -14,6 +12,6 @@ public class WalkingSection extends Section {
     }
 
     public String toString() {
-        return "  - Gå " + walkingTime + "\n";
+        return "  - Gå " + walkingTime;
     }
 }

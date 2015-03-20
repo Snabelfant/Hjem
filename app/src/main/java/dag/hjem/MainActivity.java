@@ -2,8 +2,6 @@ package dag.hjem;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,7 +30,6 @@ import dag.hjem.service.TravelService;
 import dag.hjem.service.TravelServiceCollector;
 
 public class MainActivity extends ActionBarActivity {
-    ViewPager travelProposalPager;
     private Spinner fromSpinner;
     private Spinner toSpinner;
     private Spinner timeOptionSpinner;
@@ -75,10 +73,10 @@ public class MainActivity extends ActionBarActivity {
         timeOptionAdapter.setDropDownViewResource(R.layout.spinner_layout);
         timeOptionSpinner.setAdapter(timeOptionAdapter);
 
-        travelProposalPager = (ViewPager) findViewById(R.id.travelproposalpager);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        final TravelProposalAdapter travelProposalAdapter = new TravelProposalAdapter(fragmentManager);
-        travelProposalPager.setAdapter(travelProposalAdapter);
+        ListView travelList = (ListView) findViewById(R.id.travels);
+
+        final TravelListAdapter travelListAdapter = new TravelListAdapter(this);
+        travelList.setAdapter(travelListAdapter);
 
         locations = new Locations(getApplicationContext());
 
@@ -95,8 +93,7 @@ public class MainActivity extends ActionBarActivity {
                         if (result.getException() != null) {
                             YesNoCancel.show(getApplicationContext(), "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
                         } else {
-                            travelProposalAdapter.setTravelProposals(result.getTravelProposals());
-                            travelProposalPager.invalidate();
+                            travelListAdapter.setTravelSearchResult(result);
                         }
                     }
 

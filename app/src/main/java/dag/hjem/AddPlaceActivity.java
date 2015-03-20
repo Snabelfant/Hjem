@@ -92,9 +92,8 @@ public class AddPlaceActivity extends Activity {
             }
         });
 
-        ListView placesListView = (ListView) findViewById(R.id.placesfound);
 
-        placesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        placesFound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Place selectedPlace = (Place) parent.getAdapter().getItem(position);

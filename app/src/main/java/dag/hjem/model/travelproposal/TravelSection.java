@@ -1,12 +1,7 @@
 package dag.hjem.model.travelproposal;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import dag.hjem.model.travelproposal.Section;
-
-import static dag.hjem.model.travelproposal.Util.formatTime;
 
 
 public class TravelSection extends Section {
@@ -18,6 +13,7 @@ public class TravelSection extends Section {
     private String transportation;
     private String lineName;
     private String destination;
+    private List<String> deviations = new ArrayList<>();
 
     public String getDepartureTime() {
         return departureTime;
@@ -83,8 +79,6 @@ public class TravelSection extends Section {
         this.destination = destination;
     }
 
-    private List<String> deviations = new ArrayList<>();
-
     public void addDeviation(String deviation) {
         deviations.add(deviation);
     }
@@ -98,7 +92,7 @@ public class TravelSection extends Section {
                 .append(" (").append(travelTime).append(")\n");
 
         for (String deviation : deviations) {
-            s.append("     ! ").append(deviation).append("\n");
+            s.append("     ! ").append(deviation);
         }
 
         return s.toString();

@@ -78,7 +78,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
 //        Location from = new StopLocation("q", "Q", 2190780);
 //        Location to = new StopLocation("r", "R", 1000027623);
-//        travelService.getTravelProposals(from, to, true, Calendar.getInstance());
+//        travelService.getTravels(from, to, true, Calendar.getInstance());
 //        Log.i("hjem", "TR1");
 
         Location to = new UtmLocation("kr", 597894, 6647727);

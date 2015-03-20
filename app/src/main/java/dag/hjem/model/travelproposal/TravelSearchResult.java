@@ -9,7 +9,7 @@ import dag.hjem.ruter.model.TravelResponse;
 public class TravelSearchResult {
     private String from;
     private String to;
-    private List<Travel> travelProposals;
+    private List<Travel> travels;
     private Exception exception;
 
     public static TravelSearchResult fromException(Exception exception) {
@@ -22,11 +22,11 @@ public class TravelSearchResult {
         TravelSearchResult travelSearchResult = new TravelSearchResult();
         travelSearchResult.from = from;
         travelSearchResult.to = to;
-        travelSearchResult.travelProposals = new ArrayList<>();
+        travelSearchResult.travels = new ArrayList<>();
 
         for (TravelProposal travelProposal : ruterResponse.getTravelProposals()) {
             Travel travel = Travel.fromRuter(travelProposal);
-            travelSearchResult.travelProposals.add(travel);
+            travelSearchResult.travels.add(travel);
         }
 
         return travelSearchResult;
@@ -36,14 +36,14 @@ public class TravelSearchResult {
         return exception;
     }
 
-    public List<Travel> getTravelProposals() {
-        return travelProposals;
+    public List<Travel> getTravels() {
+        return travels;
     }
 
     public String toString() {
         StringBuilder s = new StringBuilder("*** " + from + " -> " + to + " ***\n");
 
-        for (Travel travel : travelProposals) {
+        for (Travel travel : travels) {
             s.append(travel.toString());
         }
 

@@ -1,13 +1,10 @@
 package dag.hjem.model.travelproposal;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import dag.hjem.ruter.model.TravelProposal;
 import dag.hjem.ruter.model.Stage;
-
-import static dag.hjem.model.travelproposal.Util.formatTime;
+import dag.hjem.ruter.model.TravelProposal;
 
 public class Travel {
     private String departureTime;
@@ -15,7 +12,6 @@ public class Travel {
     private String totalTravelTime;
     private List<String> remarks;
     private List<Section> sections;
-
 
     public static Travel fromRuter(TravelProposal ruterProposal) {
         Travel travel = new Travel();
@@ -34,23 +30,32 @@ public class Travel {
         return travel;
     }
 
-    public String toString() {
-        StringBuilder s = new StringBuilder();
+    public List<Section> getSections() {
+        return sections;
+    }
 
-        s.append("++ ")
+    public String getSummary() {
+        return new StringBuilder().append("++ ")
                 .append(departureTime)
                 .append(" - ")
                 .append(arrivalTime)
                 .append(" (")
                 .append(totalTravelTime)
-                .append(")\n");
+                .append(")\n").toString();
 
+
+    }
+
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+
+        s.append(getSummary() + "\n");
         for (String remark : remarks) {
             s.append("     ! ").append(remark).append("\n");
         }
 
         for (Section section : sections) {
-            s.append(section.toString());
+            s.append(section.toString() + "\n");
         }
 
         return s.toString();
