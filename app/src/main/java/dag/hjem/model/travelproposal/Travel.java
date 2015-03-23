@@ -7,53 +7,64 @@ import dag.hjem.ruter.model.Stage;
 import dag.hjem.ruter.model.TravelProposal;
 
 public class Travel {
-    private String departureTime;
-    private String arrivalTime;
-    private String totalTravelTime;
-    private List<String> remarks;
+    private Summary summary;
     private List<Section> sections;
 
     public static Travel fromRuter(TravelProposal ruterProposal) {
         Travel travel = new Travel();
-        travel.departureTime = Util.formatTime(ruterProposal.getDepartureTime());
-        travel.arrivalTime = Util.formatTime(ruterProposal.getArrivalTime());
-        travel.totalTravelTime = Util.toHhMm(ruterProposal.getTotalTravelTime());
-        travel.remarks = ruterProposal.getRemarks();
         travel.sections = new ArrayList<>();
+
+        Section previousSection = null;
         for (Stage ruterStage : ruterProposal.getStages()) {
             Section section = Section.fromRuter(ruterStage);
+
             if (section != null) {
+                WaitingSection waitingSection = createWaitingSection(previousSection, section);
+
+                if (waitingSection != null) {
+                    travel.sections.add(waitingSection);
+                }
+
                 travel.sections.add(section);
+                previousSection = section;
             }
         }
 
+        String departureTime = Util.formatTime(ruterProposal.getDepartureTime());
+        String arrivalTime = Util.formatTime(ruterProposal.getArrivalTime());
+        String totalTravelTime = Util.toHhMm(ruterProposal.getTotalTravelTime());
+        List<String> remarks = ruterProposal.getRemarks();
+        travel.summary = new Summary(departureTime, arrivalTime, totalTravelTime, travel.sections, remarks);
         return travel;
+    }
+
+    private static WaitingSection createWaitingSection(Section previousSection, Section thisSection) {
+        WaitingSection waitingSection = null;
+
+        if (previousSection instanceof MovementSection && thisSection instanceof MovementSection) {
+            int thisDepartureTimeInMins = Util.timeToMins(((MovementSection) thisSection).getDepartureTime());
+            int previousArrivalTimeInMins = Util.timeToMins(((MovementSection) previousSection).getArrivalTime());
+            int waitingTime = thisDepartureTimeInMins - previousArrivalTimeInMins;
+            if (waitingTime > 0) {
+                waitingSection = new WaitingSection(waitingTime);
+            }
+        }
+        return waitingSection;
+    }
+
+
+    public Summary getSummary() {
+        return summary;
     }
 
     public List<Section> getSections() {
         return sections;
     }
 
-    public String getSummary() {
-        return new StringBuilder().append("++ ")
-                .append(departureTime)
-                .append(" - ")
-                .append(arrivalTime)
-                .append(" (")
-                .append(totalTravelTime)
-                .append(")\n").toString();
-
-
-    }
-
     public String toString() {
         StringBuilder s = new StringBuilder();
 
-        s.append(getSummary() + "\n");
-        for (String remark : remarks) {
-            s.append("     ! ").append(remark).append("\n");
-        }
-
+        s.append(summary.toString() + "\n");
         for (Section section : sections) {
             s.append(section.toString() + "\n");
         }

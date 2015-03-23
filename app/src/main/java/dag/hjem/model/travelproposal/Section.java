@@ -1,29 +1,27 @@
 package dag.hjem.model.travelproposal;
 
 import dag.hjem.ruter.model.Deviation;
-import dag.hjem.ruter.model.TransportationType;
 import dag.hjem.ruter.model.Stage;
 
 public abstract class Section {
 
     public static Section fromRuter(Stage ruterStage) {
-        if (ruterStage.getTransportation() == TransportationType.WALKING) {
+        if (ruterStage.getTransportation() == dag.hjem.ruter.model.TransportationType.WALKING) {
             int minutes = Util.toMinutes(ruterStage.getWalkingTime());
             if (minutes == 0) {
                 return null;
             } else {
-                WalkingSection stage = new WalkingSection(minutes);
+                WalkingSection stage = new WalkingSection(minutes,
+                        Util.formatTime(ruterStage.getDepartureTime()),
+                        Util.formatTime(ruterStage.getArrivalTime()));
                 return stage;
             }
         } else {
-            TravelSection stage = new TravelSection();
-            stage.setDepartureTime(Util.formatTime(ruterStage.getDepartureTime()));
+            TravelSection stage = new TravelSection(Util.formatTime(ruterStage.getDepartureTime()), Util.formatTime(ruterStage.getArrivalTime()));
             stage.setDepartureStopName(ruterStage.getDepartureStopName());
-            stage.setArrivalTime(Util.formatTime(ruterStage.getArrivalTime()));
             stage.setArrivalStopName(ruterStage.getArrivalStopName());
             stage.setTravelTime(Util.toHhMm(ruterStage.getTravelTime()));
-            stage.setTransportation(ruterStage.getTransportation().getDescription());
-            stage.setLineName(ruterStage.getLineName());
+            stage.setLine(ruterStage.getLineName(), TransportationType.fromRuter(ruterStage.getTransportation()));
             stage.setDestination(ruterStage.getDestination());
 
             for (Deviation ruterDeviation : ruterStage.getDeviations()) {
@@ -33,4 +31,5 @@ public abstract class Section {
             return stage;
         }
     }
+
 }

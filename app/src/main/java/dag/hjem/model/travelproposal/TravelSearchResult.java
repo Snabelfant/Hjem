@@ -12,6 +12,9 @@ public class TravelSearchResult {
     private List<Travel> travels;
     private Exception exception;
 
+    private TravelSearchResult() {
+    }
+
     public static TravelSearchResult fromException(Exception exception) {
         TravelSearchResult travelSearchResult = new TravelSearchResult();
         travelSearchResult.exception = exception;
@@ -43,10 +46,15 @@ public class TravelSearchResult {
     public String toString() {
         StringBuilder s = new StringBuilder("*** " + from + " -> " + to + " ***\n");
 
-        for (Travel travel : travels) {
-            s.append(travel.toString());
+        if (travels != null) {
+            for (Travel travel : travels) {
+                s.append(travel.toString());
+            }
         }
 
+        if (exception != null) {
+            s.append(exception.toString());
+        }
         return s.toString();
     }
 }

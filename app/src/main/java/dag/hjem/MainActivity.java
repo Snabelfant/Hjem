@@ -56,21 +56,21 @@ public class MainActivity extends ActionBarActivity {
         findButton = (Button) findViewById(R.id.finddepartures);
         fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
         ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout);
-        fromAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                R.layout.spinner);
+        fromAdapter.setDropDownViewResource(R.layout.spinner);
         fromSpinner.setAdapter(fromAdapter);
 
         toSpinner = (Spinner) findViewById(R.id.toSpinner);
         ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout);
-        toAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                R.layout.spinner);
+        toAdapter.setDropDownViewResource(R.layout.spinner);
         toSpinner.setAdapter(toAdapter);
 
         timeOptionSpinner = (Spinner) findViewById(R.id.timeOptionsSpinner);
         List<TimeOption> timeOptions = TimeOption.getTimes();
         ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_layout, timeOptions);
-        timeOptionAdapter.setDropDownViewResource(R.layout.spinner_layout);
+                R.layout.spinner, timeOptions);
+        timeOptionAdapter.setDropDownViewResource(R.layout.spinner);
         timeOptionSpinner.setAdapter(timeOptionAdapter);
 
         ListView travelList = (ListView) findViewById(R.id.travels);
@@ -85,13 +85,12 @@ public class MainActivity extends ActionBarActivity {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 TravelService travelService = new TravelService(new RuterApi(), new TravelServiceCollector() {
                     @Override
                     public void setTravelSearchResult(TravelSearchResult result) {
                         Log.i("hjem", "TR=" + result.toString());
                         if (result.getException() != null) {
-                            YesNoCancel.show(getApplicationContext(), "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
+                            YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
                         } else {
                             travelListAdapter.setTravelSearchResult(result);
                         }
@@ -114,34 +113,12 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
-
     }
-
-//    private void addListeners() {
-    //        timeDirectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                TimeDirection timeDirection = (TimeDirection) parentView.getItemAtPosition(position);
-//                List<TimeOption> timeOptions = getTimeSpinnerList(timeDirection);
-//                ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<TimeOption>(this,
-//                        R.layout.spinner_layout, timeOptions);
-//                timeOptionSpinner.setAdapter(timeOptionAdapter);
-//                }
-//            };
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//                // your code here
-//            }
-//
-//        });
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         updateLocationSpinners();
-//        Log.i("hjem", "Tilbake=" + data);
     }
 
     @Override
