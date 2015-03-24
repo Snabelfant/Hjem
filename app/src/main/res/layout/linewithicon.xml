@@ -15,7 +15,7 @@
         android:id="@+id/travelsummary_line_lineno"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center_vertical"
         android:background="#ff0000ff"
         android:textColor="#ffffffff"
         android:textSize="20dp" />

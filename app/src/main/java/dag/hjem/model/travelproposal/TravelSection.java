@@ -16,20 +16,28 @@ public class TravelSection extends MovementSection {
         super(departureTime, arrivalTime);
     }
 
-    public String getDepartureStopName() {
-        return departureStopName;
-    }
-
-    public void setDepartureStopName(String departureStopName) {
-        this.departureStopName = departureStopName;
+    public String getArrivalStopName() {
+        return arrivalStopName;
     }
 
     public void setArrivalStopName(String arrivalStopName) {
         this.arrivalStopName = arrivalStopName;
     }
 
+    public String getTravelTime() {
+        return travelTime;
+    }
+
     public void setTravelTime(String travelTime) {
         this.travelTime = travelTime;
+    }
+
+    public String getDepartureStopName() {
+        return departureStopName;
+    }
+
+    public void setDepartureStopName(String departureStopName) {
+        this.departureStopName = departureStopName;
     }
 
     public Line getLine() {

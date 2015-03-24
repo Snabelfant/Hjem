@@ -19,6 +19,8 @@ import dag.hjem.model.travelproposal.Section;
 import dag.hjem.model.travelproposal.Summary;
 import dag.hjem.model.travelproposal.Travel;
 import dag.hjem.model.travelproposal.TravelSearchResult;
+import dag.hjem.model.travelproposal.TravelSection;
+import dag.hjem.model.travelproposal.WaitingSection;
 import dag.hjem.model.travelproposal.WalkingSection;
 import dag.hjem.service.TravelServiceCollector;
 
@@ -46,23 +48,69 @@ public class TravelListAdapter extends ArrayAdapter<Travel> implements TravelSer
 
         LinearLayout travelSectionsView = (LinearLayout) travelView.findViewById(R.id.travelsections);
         List<Section> sections = travel.getSections();
+        View lastViewIfWalkingView = null;
         for (Section section : sections) {
             View sectionView;
             if (section instanceof WalkingSection) {
                 WalkingSection walkingSection = (WalkingSection) section;
-                sectionView = inflater.inflate(R.layout.walkingsection, parent, false);
-                ImageView walkingIconView = (ImageView) sectionView.findViewById(R.id.walkingsection_icon);
-                walkingIconView.setImageResource(R.drawable.hjem32);
+                sectionView = inflater.inflate(R.layout.walkingwaitingsection, parent, false);
 
                 TextView walkingTimeView = (TextView) sectionView.findViewById(R.id.walkingsection_walkingtime);
                 walkingTimeView.setText(Integer.toString(walkingSection.getWalkingTime()) + " min");
 
+                sectionView.findViewById(R.id.waitingsection_icon).setVisibility(View.GONE);
+                sectionView.findViewById(R.id.waitingsection_waitingtime).setVisibility(View.GONE);
+                travelSectionsView.addView(sectionView);
+                lastViewIfWalkingView = sectionView;
             } else {
-                sectionView = inflater.inflate(R.layout.travelsection, parent, false);
-                TextView sectionAsText = (TextView) sectionView.findViewById(R.id.travelsection_text);
-                sectionAsText.setText(section.toString());
+                if (section instanceof WaitingSection) {
+                    WaitingSection waitingSection = (WaitingSection) section;
+                    TextView waitingTimeView;
+                    if (lastViewIfWalkingView != null) {
+                        lastViewIfWalkingView.findViewById(R.id.waitingsection_icon).setVisibility(View.VISIBLE);
+                        waitingTimeView = (TextView) lastViewIfWalkingView.findViewById(R.id.waitingsection_waitingtime);
+                        waitingTimeView.setVisibility(View.VISIBLE);
+                    } else {
+                        sectionView = inflater.inflate(R.layout.walkingwaitingsection, parent, false);
+                        sectionView.findViewById(R.id.walkingsection_icon).setVisibility(View.GONE);
+                        sectionView.findViewById(R.id.walkingsection_walkingtime).setVisibility(View.GONE);
+                        waitingTimeView = (TextView) sectionView.findViewById(R.id.waitingsection_waitingtime);
+                        travelSectionsView.addView(sectionView);
+                    }
+                    waitingTimeView.setText(waitingSection.getWaitingTime() + " min");
+                } else {
+                    TravelSection travelSection = (TravelSection) section;
+                    sectionView = inflater.inflate(R.layout.travelsection, parent, false);
+
+                    TextView departureTime = (TextView) sectionView.findViewById(R.id.travelsection_departuretime);
+                    departureTime.setText(travelSection.getDepartureTime());
+
+                    TextView departureStop = (TextView) sectionView.findViewById(R.id.travelsection_departurestop);
+                    departureStop.setText(travelSection.getDepartureStopName());
+
+                    ImageView typeIconView = (ImageView) sectionView.findViewById(R.id.travelsection_icon);
+                    typeIconView.setImageResource(travelSection.getLine().getType().getIconId());
+
+                    TextView lineNameView = (TextView) sectionView.findViewById(R.id.travelsection_lineno);
+                    lineNameView.setText(travelSection.getLine().getLineName());
+
+                    TextView destinationView = (TextView) sectionView.findViewById(R.id.travelsection_destination);
+                    destinationView.setText(travelSection.getDestination());
+
+                    TextView arrivalTimeView = (TextView) sectionView.findViewById(R.id.travelsection_arriveltime);
+                    arrivalTimeView.setText(travelSection.getArrivalTime());
+
+                    TextView arrivalStopView = (TextView) sectionView.findViewById(R.id.travelsection_arrivalstop);
+                    arrivalStopView.setText(travelSection.getArrivalStopName());
+
+                    TextView travelTimeView = (TextView) sectionView.findViewById(R.id.travelsection_traveltime);
+                    travelTimeView.setText("(" + travelSection.getTravelTime() + ")");
+
+                    travelSectionsView.addView(sectionView);
+                }
+
+                lastViewIfWalkingView = null;
             }
-            travelSectionsView.addView(sectionView);
         }
 
         travelSectionsView.setVisibility(View.GONE);
@@ -110,7 +158,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> implements TravelSer
             View lineView = inflater.inflate(R.layout.linewithicon, parent, false);
 
             ImageView typeIconView = (ImageView) lineView.findViewById(R.id.travelsummary_line_icon);
-            typeIconView.setImageResource(R.drawable.buss);
+            typeIconView.setImageResource(line.getType().getIconId());
             TextView lineNameView = (TextView) lineView.findViewById(R.id.travelsummary_line_lineno);
             lineNameView.setText(line.getLineName());
 
