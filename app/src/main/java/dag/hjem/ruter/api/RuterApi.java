@@ -37,7 +37,14 @@ public class RuterApi {
     }
 
     public List<Place> getPlaces(String partialPlacename) throws IOException {
-        Place[] places = getPlacesClient.appendPath(partialPlacename).queryParam("counties", "Oslo").queryParam("counties", "Akershus").get(Place[].class);
+        Place[] places = getPlacesClient
+                .appendPath(partialPlacename)
+                .queryParam("counties", "Oslo")
+                .queryParam("counties", "Akershus")
+                .queryParam("counties", "Ostfold")
+                .queryParam("counties", "Vestfold")
+                .queryParam("counties", "Buskerud")
+                .get(Place[].class);
         return Arrays.asList(places);
     }
 
