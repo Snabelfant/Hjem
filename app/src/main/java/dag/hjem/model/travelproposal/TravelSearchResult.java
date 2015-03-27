@@ -10,6 +10,7 @@ public class TravelSearchResult {
     private String from;
     private String to;
     private List<Travel> travels;
+    private String reisError;
     private Exception exception;
 
     private TravelSearchResult() {
@@ -25,6 +26,7 @@ public class TravelSearchResult {
         TravelSearchResult travelSearchResult = new TravelSearchResult();
         travelSearchResult.from = from;
         travelSearchResult.to = to;
+        travelSearchResult.reisError = ruterResponse.getReisError();
         travelSearchResult.travels = new ArrayList<>();
 
         for (TravelProposal travelProposal : ruterResponse.getTravelProposals()) {
@@ -33,6 +35,10 @@ public class TravelSearchResult {
         }
 
         return travelSearchResult;
+    }
+
+    public String getReisError() {
+        return reisError;
     }
 
     public Exception getException() {

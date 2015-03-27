@@ -11,6 +11,7 @@ import java.util.List;
 import dag.hjem.rest.Client;
 import dag.hjem.ruter.model.Place;
 import dag.hjem.ruter.model.Stop;
+import dag.hjem.ruter.model.Street;
 import dag.hjem.ruter.model.TravelResponse;
 
 /**
@@ -21,6 +22,7 @@ public class RuterApi {
     private Client getStopClient = new Client("/place/getstop/");
     private Client getTravelsClient = new Client("/travel/gettravels");
     private Client getPlacesClient = new Client("/place/getplaces");
+    private Client getStreetClient = new Client("/street/getstreet");
 
     public RuterApi() {
 
@@ -36,7 +38,13 @@ public class RuterApi {
         return getStopClient.appendPath(Integer.toString(id)).get(Stop.class);
     }
 
+    public Street getStreet(int id) throws IOException {
+        return getStreetClient.appendPath(Integer.toString(id)).get(Street.class);
+    }
+
     public List<Place> getPlaces(String partialPlacename) throws IOException {
+        Street street = getStreet(21902080);
+        Log.i("hjem", street.toString());
         Place[] places = getPlacesClient
                 .appendPath(partialPlacename)
                 .queryParam("counties", "Oslo")

@@ -16,11 +16,10 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
-import dag.hjem.gps.GpsObserver;
 import dag.hjem.gps.Positioning;
-import dag.hjem.gps.UtmPosition;
 import dag.hjem.model.TimeDirection;
 import dag.hjem.model.TimeOption;
+import dag.hjem.model.location.Here;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.Locations;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
@@ -36,7 +35,6 @@ public class MainActivity extends ActionBarActivity {
     private Button findButton;
     private Positioning positioning;
     private RuterApi ruterApi;
-    private UtmPosition lastKnownGpsPosition;
     private Locations locations;
 
     @Override
@@ -47,9 +45,7 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
 
-        lastKnownGpsPosition = null;
-        GpsObserver gpsObserver = new GpsObserverImpl();
-        positioning = new Positioning(this, gpsObserver);
+        positioning = new Positioning(this, Here.getGpsObserver());
 
         ruterApi = new RuterApi();
 
@@ -89,10 +85,19 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void setTravelSearchResult(TravelSearchResult result) {
                         Log.i("hjem", "TR=" + result.toString());
+
                         if (result.getException() != null) {
                             YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
                         } else {
                             travelListAdapter.setTravelSearchResult(result);
+
+                            if (result.getReisError() != null) {
+                                YesNoCancel.show(MainActivity.this, "!", result.getReisError(), YesNoCancel.EMPTY, null, null);
+                            } else {
+                                if (result.getTravels().size() == 0) {
+                                    YesNoCancel.show(MainActivity.this, "!", "Ingen forslag", YesNoCancel.EMPTY, null, null);
+                                }
+                            }
                         }
                     }
 
@@ -102,14 +107,16 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
 
-                Location fromLocation = (Location) fromSpinner.getSelectedItem();
-                Location toLocation = (Location) toSpinner.getSelectedItem();
-                TimeOption timeOption = (TimeOption) timeOptionSpinner.getSelectedItem();
-                boolean isAfter = TimeDirection.AFTER.equals(timeOption.getTimeDirection());
                 try {
+                    Location fromLocation = (Location) fromSpinner.getSelectedItem();
+                    Location toLocation = (Location) toSpinner.getSelectedItem();
+                    TimeOption timeOption = (TimeOption) timeOptionSpinner.getSelectedItem();
+                    boolean isAfter = TimeDirection.AFTER.equals(timeOption.getTimeDirection());
                     travelService.getTravelProposals(fromLocation, toLocation, isAfter, timeOption.getTime());
                 } catch (IOException e) {
                     YesNoCancel.show(getApplicationContext(), "Oi!", e.toString(), YesNoCancel.EMPTY, null, null);
+                } catch (RuntimeException rte) {
+                    YesNoCancel.show(MainActivity.this, "Hmm", rte.getMessage(), YesNoCancel.EMPTY, null, null);
                 }
             }
         });
@@ -133,7 +140,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (id == R.id.mainactivitymenu_add_place) {
             Intent addPlaceActivityIntent = new Intent(this, AddPlaceActivity.class);
-            addPlaceActivityIntent.putExtra("gpsposition", lastKnownGpsPosition);
+            addPlaceActivityIntent.putExtra("gpsposition", Here.getCurrentPosition());
             this.startActivityForResult(addPlaceActivityIntent, 12345);
             return true;
         }
@@ -161,11 +168,4 @@ public class MainActivity extends ActionBarActivity {
         adapter.addAll(locations);
     }
 
-    private class GpsObserverImpl implements GpsObserver {
-
-        @Override
-        public void positionChanged(UtmPosition position) {
-            lastKnownGpsPosition = position;
-        }
-    }
 }

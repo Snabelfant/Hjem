@@ -79,7 +79,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> implements TravelSer
                     }
                     waitingTimeView.setText(waitingSection.getWaitingTime() + " min");
                 } else {
-                    TravelSection travelSection = (TravelSection) section;
+                    final TravelSection travelSection = (TravelSection) section;
                     sectionView = inflater.inflate(R.layout.travelsection, parent, false);
 
                     TextView departureTime = (TextView) sectionView.findViewById(R.id.travelsection_departuretime);
@@ -106,11 +106,26 @@ public class TravelListAdapter extends ArrayAdapter<Travel> implements TravelSer
                     TextView travelTimeView = (TextView) sectionView.findViewById(R.id.travelsection_traveltime);
                     travelTimeView.setText("(" + travelSection.getTravelTime() + ")");
 
+                    Button deviationsButton = (Button) sectionView.findViewById(R.id.travelsection_deviations);
+                    if (travelSection.hasDeviations()) {
+                        deviationsButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                YesNoCancel.show(TravelListAdapter.this.getContext(), "Avvik", travelSection.getDeviations(), YesNoCancel.EMPTY, null, null);
+                            }
+                        });
+                    } else {
+                        deviationsButton.setVisibility(View.GONE);
+                    }
+
+
                     travelSectionsView.addView(sectionView);
                 }
 
                 lastViewIfWalkingView = null;
             }
+
+
         }
 
         travelSectionsView.setVisibility(View.GONE);

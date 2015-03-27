@@ -76,4 +76,17 @@ public class TravelSection extends MovementSection {
 
         return s.toString();
     }
+
+    public boolean hasDeviations() {
+        return deviations != null && deviations.size() > 0;
+    }
+
+    public String getDeviations() {
+        StringBuilder sb = new StringBuilder();
+
+        for (String line : deviations) {
+            sb.append(line).append('\n');
+        }
+        return sb.toString();
+    }
 }

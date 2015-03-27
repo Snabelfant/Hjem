@@ -17,8 +17,8 @@ public class TravelResponse {
         return travelProposals;
     }
 
-    public ReisError getReisError() {
-        return reisError;
+    public String getReisError() {
+        return reisError == null ? null : reisError.getDescription();
     }
 
     @Override

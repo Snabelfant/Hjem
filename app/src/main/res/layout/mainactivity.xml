@@ -20,25 +20,25 @@
 
         <Spinner
             android:id="@+id/fromSpinner"
-            android:layout_width="wrap_content"
+            android:layout_width="190dp"
             android:layout_height="match_parent"
             android:spinnerMode="dropdown" />
 
         <Spinner
             android:id="@+id/toSpinner"
-            android:layout_width="wrap_content"
+            android:layout_width="190dp"
             android:layout_height="match_parent"
             android:spinnerMode="dropdown" />
 
         <Spinner
             android:id="@+id/timeOptionsSpinner"
-            android:layout_width="wrap_content"
+            android:layout_width="190dp"
             android:layout_height="match_parent"
             android:spinnerMode="dropdown" />
 
         <Button
             android:id="@+id/finddepartures"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:text="Kjøyr"
             android:textSize="20dp" />

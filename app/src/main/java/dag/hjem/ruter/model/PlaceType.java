@@ -11,8 +11,8 @@ public enum PlaceType {
 
     private String description;
 
-    private PlaceType(String derciption) {
-        this.description = derciption;
+    private PlaceType(String description) {
+        this.description = description;
     }
 
     public String getDescription() {
