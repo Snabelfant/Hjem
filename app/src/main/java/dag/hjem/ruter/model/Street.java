@@ -26,4 +26,8 @@ public class Street {
         this.houses = houses;
         this.placeType = placeType;
     }
+
+    public List<House> getHouses() {
+        return houses;
+    }
 }

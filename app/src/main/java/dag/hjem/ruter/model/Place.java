@@ -4,9 +4,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.List;
 
-/**
- * Created by Dag on 07.03.2015.
- */
 public class Place {
     private int id;
     private int x;
@@ -19,23 +16,6 @@ public class Place {
     private String district;
     private boolean isAlightingAllowed;
     private boolean isBoardingAllowed;
-
-    public int getId() {
-        return id;
-    }
-
-    public PlaceType getPlaceType() {
-        return placeType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
     private boolean isRealTimeStop;
     private List<Line> lines;
     private List<StopPoint> stopPoints;
@@ -43,7 +23,6 @@ public class Place {
     private List<Stop> stops;
     private XY center;
     private List<House> houses;
-
 
     public Place(@JsonProperty("ID") int id,
                  @JsonProperty("X") int x,
@@ -84,6 +63,26 @@ public class Place {
         this.stops = stops;
         this.center = center;
         this.houses = houses;
+    }
+
+    public boolean isRealTimeStop() {
+        return isRealTimeStop;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public PlaceType getPlaceType() {
+        return placeType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDistrict() {
+        return district;
     }
 
     @Override

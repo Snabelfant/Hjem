@@ -17,4 +17,16 @@ public class House {
         this.y = y;
         this.name = name;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import dag.hjem.rest.Client;
+import dag.hjem.ruter.model.House;
 import dag.hjem.ruter.model.Place;
 import dag.hjem.ruter.model.Stop;
 import dag.hjem.ruter.model.Street;
@@ -38,13 +39,12 @@ public class RuterApi {
         return getStopClient.appendPath(Integer.toString(id)).get(Stop.class);
     }
 
-    public Street getStreet(int id) throws IOException {
-        return getStreetClient.appendPath(Integer.toString(id)).get(Street.class);
+    public List<House> getHouses(int streetId) throws IOException {
+        Street street = getStreetClient.appendPath(Integer.toString(streetId)).get(Street.class);
+        return street.getHouses();
     }
 
     public List<Place> getPlaces(String partialPlacename) throws IOException {
-        Street street = getStreet(21902080);
-        Log.i("hjem", street.toString());
         Place[] places = getPlacesClient
                 .appendPath(partialPlacename)
                 .queryParam("counties", "Oslo")
@@ -61,7 +61,7 @@ public class RuterApi {
                 .queryParam("isAfter", isAfter)
                 .queryParam("time", formatDepartureOrArrivalTime(departureOrArrivalTime));
 
-        if (fromPlaceId != null ) {
+        if (fromPlaceId != null) {
             c = c.queryParam("fromplace", fromPlaceId);
         } else {
             c = c.encodedQuery("fromPlace=" + toXY(fromX, fromY));
@@ -69,7 +69,7 @@ public class RuterApi {
 
         if (toPlaceId != null) {
             c = c.queryParam("toplace", toPlaceId);
-        }else {
+        } else {
             c = c.encodedQuery("toPlace=" + toXY(toX, toY));
         }
 

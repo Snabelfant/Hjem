@@ -24,9 +24,12 @@ import java.io.IOException;
 
 import dag.hjem.gps.UtmPosition;
 import dag.hjem.model.location.Locations;
+import dag.hjem.model.travelproposal.House;
 import dag.hjem.model.travelproposal.Place;
+import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.ruter.api.RuterApi;
 import dag.hjem.service.TravelService;
+import dag.hjem.service.TravelServiceCollector;
 
 public class AddPlaceActivity extends Activity {
     private TravelService travelService;
@@ -39,7 +42,6 @@ public class AddPlaceActivity extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         lastKnownGpsPosition = (UtmPosition) bundle.get("gpsposition");
-        Log.i("hjem", "gps=" + lastKnownGpsPosition);
 
         ListView placesFound = (ListView) findViewById(R.id.placesfound);
         final PlaceListAdapter placeListAdapter = new PlaceListAdapter(this);
@@ -59,7 +61,7 @@ public class AddPlaceActivity extends Activity {
         });
 
         saveGpsPosition.setEnabled(lastKnownGpsPosition != null);
-        travelService = new TravelService(new RuterApi(), placeListAdapter);
+        travelService = new TravelService(new RuterApi(), new PlaceSearchCollector(placeListAdapter));
 
         EditText searchTermView = (EditText) findViewById(R.id.placesearchterm);
         searchTermView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -81,7 +83,7 @@ public class AddPlaceActivity extends Activity {
                             placeListAdapter.clear();
                             travelService.getPlaces(searchTerm);
                         } catch (IOException e) {
-                            Toast.makeText(AddPlaceActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                            YesNoCancel.show(AddPlaceActivity.this, "Oi!!", e.toString(), YesNoCancel.EMPTY, null, null);
                         }
                     }
 
@@ -97,11 +99,20 @@ public class AddPlaceActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Place selectedPlace = (Place) parent.getAdapter().getItem(position);
-                Bundle b = new Bundle();
-                b.putSerializable("place", selectedPlace);
-                AddPlaceDialogFragment addPlaceDialogFragment = new AddPlaceDialogFragment();
-                addPlaceDialogFragment.setArguments(b);
-                addPlaceDialogFragment.show(getFragmentManager(), "Nytt Ruter-sted");
+
+                try {
+                    selectedPlace.checkCompleteness();
+
+                    Bundle b = new Bundle();
+
+                    b.putSerializable("place", selectedPlace);
+                    AddPlaceDialogFragment addPlaceDialogFragment = new AddPlaceDialogFragment();
+                    addPlaceDialogFragment.setArguments(b);
+                    addPlaceDialogFragment.show(getFragmentManager(), "Nytt Ruter-sted");
+
+                } catch (RuntimeException rte) {
+                    YesNoCancel.show(AddPlaceActivity.this, "!", rte.getMessage(), YesNoCancel.EMPTY, null, null);
+                }
             }
         });
     }
@@ -125,10 +136,14 @@ public class AddPlaceActivity extends Activity {
 
             final TextView name = (TextView) addPlaceView.findViewById(R.id.addplace_newname);
 
-            if (newPlace != null) {
-                name.setText(newPlace.getName());
-            } else {
+            if (newPlace == null) {
                 name.setText(newUtmPosition.getUtmNorth() + "/" + newUtmPosition.getUtmEast());
+            } else {
+                if (newPlace.getHouse() != null) {
+                    name.setText(newPlace.getName() + " " + newPlace.getHouse().getName());
+                } else {
+                    name.setText(newPlace.getName());
+                }
             }
 
             name.setSelected(true);
@@ -137,16 +152,21 @@ public class AddPlaceActivity extends Activity {
                 public void onClick(DialogInterface dialog, int id) {
                     try {
                         Locations locations = new Locations(getActivity());
-
-                        if (newPlace != null) {
-                            newPlace.setName(name.getText().toString());
-                            locations.addPlace(newPlace);
+                        String newName = name.getText().toString();
+                        if (newPlace == null) {
+                            locations.addUtmPosition(newUtmPosition, newName);
                         } else {
-                            locations.addUtmPosition(newUtmPosition, name.getText().toString());
+                            if (newPlace.getHouse() == null) {
+                                newPlace.setName(newName);
+                                locations.addPlace(newPlace);
+                            } else {
+                                House house = newPlace.getHouse();
+                                locations.addLocation(house.getX(), house.getY(), newName);
+                            }
                         }
                     } catch (Exception e) {
                         Log.e("hjem", "Feil: " + e.toString());
-                        YesNoCancel.show(getActivity(), "Oi!!", e.getMessage(), YesNoCancel.EMPTY, null, null);
+                        YesNoCancel.show(getActivity(), "Oi!!", e.toString(), YesNoCancel.EMPTY, null, null);
                         return;
                     }
                 }
@@ -159,5 +179,29 @@ public class AddPlaceActivity extends Activity {
             return builder.create();
         }
     }
+
+    private class PlaceSearchCollector extends TravelServiceCollector {
+        private PlaceListAdapter placeListAdapter;
+
+        private PlaceSearchCollector(PlaceListAdapter placeListAdapter) {
+            this.placeListAdapter = placeListAdapter;
+        }
+
+        @Override
+        public void setPlaceSearchResult(PlaceSearchResult result) {
+            Log.i("hjem", "PS=" + result.toString());
+
+            if (result.getException() != null) {
+                YesNoCancel.show(AddPlaceActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
+            } else {
+                placeListAdapter.setList(result.getPlaces());
+
+                if (result.getPlaces().size() == 0) {
+                    YesNoCancel.show(AddPlaceActivity.this, "!", "Ingen funnet", YesNoCancel.EMPTY, null, null);
+                }
+            }
+        }
+    }
+
 }
 

@@ -39,4 +39,10 @@ public class Locations {
         Location location = new UtmLocation(name, position.getUtmEast(), position.getUtmNorth());
         locationDao.addLocation(location);
     }
+
+    public void addLocation(int x, int y, String name) throws IOException {
+        Location location = new UtmLocation(name, x, y);
+        locationDao.addLocation(location);
+    }
+
 }

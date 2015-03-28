@@ -22,7 +22,6 @@ import dag.hjem.model.TimeOption;
 import dag.hjem.model.location.Here;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.Locations;
-import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.ruter.api.RuterApi;
 import dag.hjem.service.TravelService;
@@ -81,31 +80,7 @@ public class MainActivity extends ActionBarActivity {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TravelService travelService = new TravelService(new RuterApi(), new TravelServiceCollector() {
-                    @Override
-                    public void setTravelSearchResult(TravelSearchResult result) {
-                        Log.i("hjem", "TR=" + result.toString());
-
-                        if (result.getException() != null) {
-                            YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
-                        } else {
-                            travelListAdapter.setTravelSearchResult(result);
-
-                            if (result.getReisError() != null) {
-                                YesNoCancel.show(MainActivity.this, "!", result.getReisError(), YesNoCancel.EMPTY, null, null);
-                            } else {
-                                if (result.getTravels().size() == 0) {
-                                    YesNoCancel.show(MainActivity.this, "!", "Ingen forslag", YesNoCancel.EMPTY, null, null);
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void setPlaceSearchResult(PlaceSearchResult result) {
-
-                    }
-                });
+                TravelService travelService = new TravelService(new RuterApi(), new TravelSearchCollector(travelListAdapter));
 
                 try {
                     Location fromLocation = (Location) fromSpinner.getSelectedItem();
@@ -166,6 +141,33 @@ public class MainActivity extends ActionBarActivity {
         ArrayAdapter<Location> adapter = ((ArrayAdapter<Location>) spinner.getAdapter());
         adapter.clear();
         adapter.addAll(locations);
+    }
+
+    private class TravelSearchCollector extends TravelServiceCollector {
+        private TravelListAdapter travelListAdapter;
+
+        private TravelSearchCollector(TravelListAdapter travelListAdapter) {
+            this.travelListAdapter = travelListAdapter;
+        }
+
+        @Override
+        public void setTravelSearchResult(TravelSearchResult result) {
+            Log.i("hjem", "TR=" + result.toString());
+
+            if (result.getException() != null) {
+                YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
+            } else {
+                travelListAdapter.setTravelList(result.getTravels());
+
+                if (result.getReisError() != null) {
+                    YesNoCancel.show(MainActivity.this, "!", result.getReisError(), YesNoCancel.EMPTY, null, null);
+                } else {
+                    if (result.getTravels().size() == 0) {
+                        YesNoCancel.show(MainActivity.this, "!", "Ingen forslag", YesNoCancel.EMPTY, null, null);
+                    }
+                }
+            }
+        }
     }
 
 }

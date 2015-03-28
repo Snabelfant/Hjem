@@ -14,28 +14,19 @@ import android.widget.TextView;
 import java.util.List;
 
 import dag.hjem.model.travelproposal.Line;
-import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.Section;
 import dag.hjem.model.travelproposal.Summary;
 import dag.hjem.model.travelproposal.Travel;
-import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.model.travelproposal.TravelSection;
 import dag.hjem.model.travelproposal.WaitingSection;
 import dag.hjem.model.travelproposal.WalkingSection;
-import dag.hjem.service.TravelServiceCollector;
 
-public class TravelListAdapter extends ArrayAdapter<Travel> implements TravelServiceCollector {
+public class TravelListAdapter extends ArrayAdapter<Travel> {
     private LayoutInflater inflater;
 
     public TravelListAdapter(Context context) {
         super(context, R.layout.travel);
         inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    public void setList(List<Travel> travels) {
-        clear();
-        addAll(travels);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -142,16 +133,11 @@ public class TravelListAdapter extends ArrayAdapter<Travel> implements TravelSer
         return travelView;
     }
 
-    @Override
-    public void setTravelSearchResult(TravelSearchResult result) {
+    public void setTravelList(List<Travel> travels) {
         clear();
-        addAll(result.getTravels());
+        addAll(travels);
         notifyDataSetChanged();
 
-    }
-
-    @Override
-    public void setPlaceSearchResult(PlaceSearchResult result) {
     }
 
     private void fillSummary(View summaryView, ViewGroup parent, final Summary summary) {

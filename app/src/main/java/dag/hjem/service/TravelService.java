@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.RuterLocation;
 import dag.hjem.model.location.UtmLocation;
+import dag.hjem.model.travelproposal.HouseSearchResult;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
 import dag.hjem.ruter.api.RuterApi;
@@ -55,6 +56,30 @@ public class TravelService {
         };
 
         task.executeOnExecutor(executorService, params);
+
+    }
+
+    public void getHouses(final int ruterStreetId) throws IOException {
+        AsyncTask<Integer, Integer, HouseSearchResult> task = new AsyncTask<Integer, Integer, HouseSearchResult>() {
+
+            @Override
+            protected HouseSearchResult doInBackground(Integer... params) {
+                int ruterStreetId = params[0];
+                try {
+                    List<dag.hjem.ruter.model.House> ruterHouseSearchResult = ruterApi.getHouses(ruterStreetId);
+                    return HouseSearchResult.fromRuter(ruterHouseSearchResult);
+                } catch (IOException e) {
+                    return HouseSearchResult.fromException(e);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(HouseSearchResult result) {
+                travelServiceCollector.setHouseSearchResult(result);
+            }
+        };
+
+        task.executeOnExecutor(executorService, ruterStreetId);
 
     }
 
