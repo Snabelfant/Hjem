@@ -6,6 +6,7 @@ import java.util.List;
 
 public class TravelSection extends MovementSection {
     private String departureStopName;
+    private int departureStopId;
     private String arrivalStopName;
     private String travelTime;
     private Line line;
@@ -14,6 +15,10 @@ public class TravelSection extends MovementSection {
 
     public TravelSection(String departureTime, String arrivalTime) {
         super(departureTime, arrivalTime);
+    }
+
+    public int getDepartureStopId() {
+        return departureStopId;
     }
 
     public String getArrivalStopName() {
@@ -36,8 +41,9 @@ public class TravelSection extends MovementSection {
         return departureStopName;
     }
 
-    public void setDepartureStopName(String departureStopName) {
+    public void setDepartureStop(String departureStopName, int departureStopId) {
         this.departureStopName = departureStopName;
+        this.departureStopId = departureStopId;
     }
 
     public Line getLine() {

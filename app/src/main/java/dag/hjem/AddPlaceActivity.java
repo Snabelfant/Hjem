@@ -27,12 +27,10 @@ import dag.hjem.model.location.Locations;
 import dag.hjem.model.travelproposal.House;
 import dag.hjem.model.travelproposal.Place;
 import dag.hjem.model.travelproposal.PlaceSearchResult;
-import dag.hjem.ruter.api.RuterApi;
+import dag.hjem.service.Collector;
 import dag.hjem.service.TravelService;
-import dag.hjem.service.TravelServiceCollector;
 
 public class AddPlaceActivity extends Activity {
-    private TravelService travelService;
     private UtmPosition lastKnownGpsPosition;
 
     @Override
@@ -61,7 +59,6 @@ public class AddPlaceActivity extends Activity {
         });
 
         saveGpsPosition.setEnabled(lastKnownGpsPosition != null);
-        travelService = new TravelService(new RuterApi(), new PlaceSearchCollector(placeListAdapter));
 
         EditText searchTermView = (EditText) findViewById(R.id.placesearchterm);
         searchTermView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -81,7 +78,8 @@ public class AddPlaceActivity extends Activity {
 
                         try {
                             placeListAdapter.clear();
-                            travelService.getPlaces(searchTerm);
+                            TravelService travelService = new TravelService();
+                            travelService.getPlaces(searchTerm, new PlaceSearchCollector(placeListAdapter));
                         } catch (IOException e) {
                             YesNoCancel.show(AddPlaceActivity.this, "Oi!!", e.toString(), YesNoCancel.EMPTY, null, null);
                         }
@@ -180,7 +178,7 @@ public class AddPlaceActivity extends Activity {
         }
     }
 
-    private class PlaceSearchCollector extends TravelServiceCollector {
+    private class PlaceSearchCollector extends Collector {
         private PlaceListAdapter placeListAdapter;
 
         private PlaceSearchCollector(PlaceListAdapter placeListAdapter) {

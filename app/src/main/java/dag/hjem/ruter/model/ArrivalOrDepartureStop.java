@@ -55,6 +55,10 @@ public class ArrivalOrDepartureStop {
         this.placeType = placeType;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getX() {
         return x;
     }

@@ -17,9 +17,8 @@ import dag.hjem.model.travelproposal.House;
 import dag.hjem.model.travelproposal.HouseSearchResult;
 import dag.hjem.model.travelproposal.Place;
 import dag.hjem.model.travelproposal.PlaceType;
-import dag.hjem.ruter.api.RuterApi;
+import dag.hjem.service.Collector;
 import dag.hjem.service.TravelService;
-import dag.hjem.service.TravelServiceCollector;
 
 public class PlaceListAdapter extends ArrayAdapter<Place> {
     private LayoutInflater inflater;
@@ -86,16 +85,16 @@ public class PlaceListAdapter extends ArrayAdapter<Place> {
             houseNoAdapter.setDropDownViewResource(R.layout.spinner);
             houseNoSpinner.setAdapter(houseNoAdapter);
             houseNoSpinner.setVisibility(View.VISIBLE);
-            TravelService travelService = new TravelService(new RuterApi(), new HouseSearchCollector(houseNoAdapter, place));
             try {
-                travelService.getHouses(place.getRuterId());
+                TravelService travelService = new TravelService();
+                travelService.getHouses(place.getRuterId(), new HouseSearchCollector(houseNoAdapter, place));
             } catch (IOException e) {
                 YesNoCancel.show(PlaceListAdapter.this.getContext(), "Oi!!", e.toString(), YesNoCancel.EMPTY, null, null);
             }
         }
 
 
-        private class HouseSearchCollector extends TravelServiceCollector {
+        private class HouseSearchCollector extends Collector {
             private ArrayAdapter<House> houseNoAdapter;
             private Place place;
 

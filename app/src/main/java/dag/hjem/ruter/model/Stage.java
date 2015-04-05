@@ -69,6 +69,10 @@ public class Stage {
         return departureStop == null ? null : departureStop.getName();
     }
 
+    public int getDepartureStopId() {
+        return departureStop == null ? null : departureStop.getId();
+    }
+
     public String getArrivalStopName() {
         return arrivalStop == null ? null : arrivalStop.getName();
     }
@@ -76,7 +80,7 @@ public class Stage {
 
     public String toString() {
         if (TransportationType.WALKING.equals(transportation)) {
-            return transportation + " (" + walkingTime +") "+  arrivalTime;
+            return transportation + " (" + walkingTime + ") " + arrivalTime;
 
         } else {
 

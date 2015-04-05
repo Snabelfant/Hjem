@@ -16,24 +16,21 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
-import dag.hjem.gps.Positioning;
 import dag.hjem.model.TimeDirection;
 import dag.hjem.model.TimeOption;
 import dag.hjem.model.location.Here;
 import dag.hjem.model.location.Location;
 import dag.hjem.model.location.Locations;
+import dag.hjem.model.travelproposal.RealtimeSearchResult;
 import dag.hjem.model.travelproposal.TravelSearchResult;
-import dag.hjem.ruter.api.RuterApi;
+import dag.hjem.service.Collector;
 import dag.hjem.service.TravelService;
-import dag.hjem.service.TravelServiceCollector;
 
 public class MainActivity extends ActionBarActivity {
     private Spinner fromSpinner;
     private Spinner toSpinner;
     private Spinner timeOptionSpinner;
     private Button findButton;
-    private Positioning positioning;
-    private RuterApi ruterApi;
     private Locations locations;
 
     @Override
@@ -43,10 +40,6 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
-
-        positioning = new Positioning(this, Here.getGpsObserver());
-
-        ruterApi = new RuterApi();
 
         findButton = (Button) findViewById(R.id.finddepartures);
         fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
@@ -80,14 +73,15 @@ public class MainActivity extends ActionBarActivity {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TravelService travelService = new TravelService(new RuterApi(), new TravelSearchCollector(travelListAdapter));
 
                 try {
                     Location fromLocation = (Location) fromSpinner.getSelectedItem();
                     Location toLocation = (Location) toSpinner.getSelectedItem();
                     TimeOption timeOption = (TimeOption) timeOptionSpinner.getSelectedItem();
                     boolean isAfter = TimeDirection.AFTER.equals(timeOption.getTimeDirection());
-                    travelService.getTravelProposals(fromLocation, toLocation, isAfter, timeOption.getTime());
+
+                    TravelService travelService = new TravelService();
+                    travelService.getTravelProposals(fromLocation, toLocation, isAfter, timeOption.getTime(), new TravelSearchCollector(travelListAdapter));
                 } catch (IOException e) {
                     YesNoCancel.show(getApplicationContext(), "Oi!", e.toString(), YesNoCancel.EMPTY, null, null);
                 } catch (RuntimeException rte) {
@@ -143,7 +137,7 @@ public class MainActivity extends ActionBarActivity {
         adapter.addAll(locations);
     }
 
-    private class TravelSearchCollector extends TravelServiceCollector {
+    private class TravelSearchCollector extends Collector {
         private TravelListAdapter travelListAdapter;
 
         private TravelSearchCollector(TravelListAdapter travelListAdapter) {
@@ -166,6 +160,15 @@ public class MainActivity extends ActionBarActivity {
                         YesNoCancel.show(MainActivity.this, "!", "Ingen forslag", YesNoCancel.EMPTY, null, null);
                     }
                 }
+            }
+        }
+
+        @Override
+        public void setRealtimeSearchResult(RealtimeSearchResult result) {
+            if (result.getException() != null) {
+                YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
+            } else {
+                Log.i("hjem", result.toString());
             }
         }
     }

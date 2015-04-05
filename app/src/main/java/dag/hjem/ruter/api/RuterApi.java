@@ -10,6 +10,7 @@ import java.util.List;
 
 import dag.hjem.rest.Client;
 import dag.hjem.ruter.model.House;
+import dag.hjem.ruter.model.MonitoredStopVisit;
 import dag.hjem.ruter.model.Place;
 import dag.hjem.ruter.model.Stop;
 import dag.hjem.ruter.model.Street;
@@ -24,6 +25,7 @@ public class RuterApi {
     private Client getTravelsClient = new Client("/travel/gettravels");
     private Client getPlacesClient = new Client("/place/getplaces");
     private Client getStreetClient = new Client("/street/getstreet");
+    private Client getRealtimeClient = new Client("stopvisit/getdepartures");
 
     public RuterApi() {
 
@@ -44,6 +46,12 @@ public class RuterApi {
         return street.getHouses();
     }
 
+    public List<MonitoredStopVisit> getMonitorStopVisits(int ruterStopId, String lineNo) throws IOException {
+        MonitoredStopVisit[] monitoredStopVisits = getRealtimeClient.appendPath(Integer.toString(ruterStopId))
+                .queryParam("linenames", lineNo)
+                .get(MonitoredStopVisit[].class);
+        return Arrays.asList(monitoredStopVisits);
+    }
     public List<Place> getPlaces(String partialPlacename) throws IOException {
         Place[] places = getPlacesClient
                 .appendPath(partialPlacename)
@@ -58,6 +66,7 @@ public class RuterApi {
 
     public TravelResponse getTravels(Integer fromPlaceId, Integer fromX, Integer fromY, Integer toPlaceId, Integer toX, Integer toY, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
         Client c = getTravelsClient
+                .queryParam("proposals", 6)
                 .queryParam("isAfter", isAfter)
                 .queryParam("time", formatDepartureOrArrivalTime(departureOrArrivalTime));
 

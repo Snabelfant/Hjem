@@ -142,16 +142,19 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
 
     private void fillSummary(View summaryView, ViewGroup parent, final Summary summary) {
         summaryView.setBackgroundColor(Color.YELLOW);
-        String totalTime = new StringBuilder()
-                .append(summary.getDepartureTime())
-                .append(" - ")
-                .append(summary.getArrivalTime())
-                .append(" (")
+        String totalTravelTime = new StringBuilder()
+                .append("(")
                 .append(summary.getTotalTravelTime())
                 .append(")").toString();
 
+        TextView departureTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_departuretime);
+        departureTimeView.setText(summary.getDepartureTime());
+
+        TextView arrivalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_arrivaltime);
+        arrivalTimeView.setText(summary.getArrivalTime());
+
         TextView totalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_totaltime);
-        totalTimeView.setText(totalTime);
+        totalTimeView.setText(totalTravelTime);
 
         LinearLayout linesView = (LinearLayout) summaryView.findViewById(R.id.travelsummary_lines);
 

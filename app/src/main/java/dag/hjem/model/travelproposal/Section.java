@@ -18,7 +18,7 @@ public abstract class Section {
             }
         } else {
             TravelSection stage = new TravelSection(Util.formatTime(ruterStage.getDepartureTime()), Util.formatTime(ruterStage.getArrivalTime()));
-            stage.setDepartureStopName(ruterStage.getDepartureStopName());
+            stage.setDepartureStop(ruterStage.getDepartureStopName(), ruterStage.getDepartureStopId());
             stage.setArrivalStopName(ruterStage.getArrivalStopName());
             stage.setTravelTime(Util.toHhMm(ruterStage.getTravelTime()));
             stage.setLine(ruterStage.getLineName(), TransportationType.fromRuter(ruterStage.getTransportation()));
