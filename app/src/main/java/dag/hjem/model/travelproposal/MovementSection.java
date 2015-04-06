@@ -1,23 +1,33 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.DateTime;
+
 /**
  * Created by Dag on 21.03.2015.
  */
 abstract class MovementSection extends Section {
-    private String departureTime;
-    private String arrivalTime;
+    private DateTime departureTime;
+    private DateTime arrivalTime;
 
-    protected MovementSection(String departureTime, String arrivalTime) {
+    protected MovementSection(DateTime departureTime, DateTime arrivalTime) {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
     }
 
-    public String getDepartureTime() {
+    public DateTime getDepartureTime() {
         return departureTime;
     }
 
-    public String getArrivalTime() {
+    public String getDepartureTimeFormatted() {
+        return Util.formatTime(departureTime);
+    }
+
+    public DateTime getArrivalTime() {
         return arrivalTime;
+    }
+
+    public String getArrivalTimeFormatted() {
+        return Util.formatTime(arrivalTime);
     }
 
 }

@@ -1,16 +1,18 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.DateTime;
+
 /**
  * Created by Dag on 31.03.2015.
  */
 public class RealtimeCall {
-    private String recordedAt;
+    private DateTime recordedAt;
     private boolean isInCongestion;
-    private String aimedDepartureTime;
-    private String expectedDepartureTime;
+    private DateTime aimedDepartureTime;
+    private DateTime expectedDepartureTime;
     private String destinationName;
 
-    public RealtimeCall(String recordedAt, boolean isInCongestion, String aimedDepartureTime, String expectedDepartureTime, String destinationName) {
+    public RealtimeCall(DateTime recordedAt, boolean isInCongestion, DateTime aimedDepartureTime, DateTime expectedDepartureTime, String destinationName) {
         this.recordedAt = recordedAt;
         this.isInCongestion = isInCongestion;
         this.aimedDepartureTime = aimedDepartureTime;

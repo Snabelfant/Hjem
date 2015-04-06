@@ -74,7 +74,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                     sectionView = inflater.inflate(R.layout.travelsection, parent, false);
 
                     TextView departureTime = (TextView) sectionView.findViewById(R.id.travelsection_departuretime);
-                    departureTime.setText(travelSection.getDepartureTime());
+                    departureTime.setText(travelSection.getDepartureTimeFormatted());
 
                     TextView departureStop = (TextView) sectionView.findViewById(R.id.travelsection_departurestop);
                     departureStop.setText(travelSection.getDepartureStopName());
@@ -89,7 +89,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                     destinationView.setText(travelSection.getDestination());
 
                     TextView arrivalTimeView = (TextView) sectionView.findViewById(R.id.travelsection_arriveltime);
-                    arrivalTimeView.setText(travelSection.getArrivalTime());
+                    arrivalTimeView.setText(travelSection.getArrivalTimeFormatted());
 
                     TextView arrivalStopView = (TextView) sectionView.findViewById(R.id.travelsection_arrivalstop);
                     arrivalStopView.setText(travelSection.getArrivalStopName());
@@ -148,10 +148,10 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                 .append(")").toString();
 
         TextView departureTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_departuretime);
-        departureTimeView.setText(summary.getDepartureTime());
+        departureTimeView.setText(summary.getDepartureTimeFormatted());
 
         TextView arrivalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_arrivaltime);
-        arrivalTimeView.setText(summary.getArrivalTime());
+        arrivalTimeView.setText(summary.getArrivalTimeFormatted());
 
         TextView totalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_totaltime);
         totalTimeView.setText(totalTravelTime);

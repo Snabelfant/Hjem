@@ -1,5 +1,7 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class TravelSection extends MovementSection {
     private String destination;
     private List<String> deviations = new ArrayList<>();
 
-    public TravelSection(String departureTime, String arrivalTime) {
+    public TravelSection(DateTime departureTime, DateTime arrivalTime) {
         super(departureTime, arrivalTime);
     }
 

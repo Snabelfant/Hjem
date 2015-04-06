@@ -1,5 +1,9 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 /**
  * Created by Dag on 24.02.2015.
  */
@@ -30,6 +34,15 @@ public class Util {
         return Integer.valueOf(tokens[1]);
     }
 
+
+    public static String formatTime(DateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
+        return fmt.print(dateTime);
+    }
 
     public static String formatTime(String fullTime) {
         if (fullTime == null) {

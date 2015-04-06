@@ -2,7 +2,6 @@ package dag.hjem.service;
 
 import android.os.AsyncTask;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,7 @@ class GetRealtimeCalls extends Service {
     Set<RealtimeCallId> candidates;
 
     GetRealtimeCalls(Collector collector) {
-        super(collector);
+        super(collector, 10);
 
         candidates = new HashSet<>();
     }
@@ -43,7 +42,7 @@ class GetRealtimeCalls extends Service {
                 try {
                     List<MonitoredStopVisit> monitoredStopVisits = ruterApi.getMonitorStopVisits(ruterStopId, lineNo);
                     return RealtimeSearchResult.fromRuter(ruterStopId, lineNo, monitoredStopVisits);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     return RealtimeSearchResult.fromException(e);
                 }
             }

@@ -15,7 +15,7 @@ class GetHouses extends Service {
 
 
     public GetHouses(Collector collector) {
-        super(collector);
+        super(collector, 1);
     }
 
     void getHouses(final int ruterStreetId) throws IOException {

@@ -1,16 +1,18 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Summary {
-    private String departureTime;
-    private String arrivalTime;
+    private DateTime departureTime;
+    private DateTime arrivalTime;
     private String totalTravelTime;
     private List<String> remarks;
     private List<Line> lines;
 
-    public Summary(String departureTime, String arrivalTime, String totalTravelTime, List<Section> sections, List<String> remarks) {
+    public Summary(DateTime departureTime, DateTime arrivalTime, String totalTravelTime, List<Section> sections, List<String> remarks) {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.totalTravelTime = totalTravelTime;
@@ -25,12 +27,20 @@ public class Summary {
         }
     }
 
-    public String getDepartureTime() {
+    public DateTime getDepartureTime() {
         return departureTime;
     }
 
-    public String getArrivalTime() {
+    public String getDepartureTimeFormatted() {
+        return Util.formatTime(departureTime);
+    }
+
+    public DateTime getArrivalTime() {
         return arrivalTime;
+    }
+
+    public String getArrivalTimeFormatted() {
+        return Util.formatTime(arrivalTime);
     }
 
     public String getTotalTravelTime() {

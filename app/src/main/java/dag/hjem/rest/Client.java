@@ -4,12 +4,10 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.ISO8601DateFormat;
 
 import java.io.IOException;
 
-/**
- * Created by Dag on 06.03.2015.
- */
 public class Client {
     private ObjectMapper mapper;
     private Uri.Builder uriBuilder;
@@ -18,36 +16,23 @@ public class Client {
 
     public Client(String basePath) {
         mapper = new ObjectMapper();
+        mapper.setDateFormat(new ISO8601DateFormat());
         this.basePath = basePath;
-        clear();
-    }
-
-    private void clear() {
-        uriBuilder = null;
-        encodedQueries = null;
-    }
-
-    private void prepare() {
-        if (uriBuilder == null) {
-            uriBuilder = newUriBuilder();
-            encodedQueries = new StringBuilder();
-        }
+        uriBuilder = newUriBuilder();
+        encodedQueries = new StringBuilder();
     }
 
     public Client appendPath(String path) {
-        prepare();
         uriBuilder = uriBuilder.appendPath(path);
         return this;
     }
 
     public Client queryParam(String key, String value) {
-        prepare();
         uriBuilder = uriBuilder.appendQueryParameter(key, value);
         return this;
     }
 
     public Client encodedQuery(String query) {
-        prepare();
         encodedQueries.append("&").append(query);
         return this;
     }
@@ -61,10 +46,8 @@ public class Client {
     }
 
     public <T> T get(Class<T> c) throws IOException {
-        prepare();
         String url = uriBuilder.build().toString();
         url += encodedQueries.toString();
-        clear();
         Log.i("hjem", url);
         String content = UrlReader.get(url);
         Log.i("hjem", content);

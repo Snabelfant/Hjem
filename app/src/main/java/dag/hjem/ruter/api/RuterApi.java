@@ -20,40 +20,34 @@ import dag.hjem.ruter.model.TravelResponse;
  * Created by Dag on 25.02.2015.
  */
 public class RuterApi {
-    private Client heartBeatClient = new Client("/heartbeat/index");
-    private Client getStopClient = new Client("/place/getstop/");
-    private Client getTravelsClient = new Client("/travel/gettravels");
-    private Client getPlacesClient = new Client("/place/getplaces");
-    private Client getStreetClient = new Client("/street/getstreet");
-    private Client getRealtimeClient = new Client("stopvisit/getdepartures");
-
     public RuterApi() {
 
     }
 
     public boolean heartBeat() throws IOException {
-        String result = heartBeatClient.get(String.class);
+        String result = new Client("/heartbeat/index").get(String.class);
         Log.i("hjem", result);
         return "Pong".equals(result);
     }
 
     public Stop getStop(int id) throws IOException {
-        return getStopClient.appendPath(Integer.toString(id)).get(Stop.class);
+        return new Client("/place/getstop/").appendPath(Integer.toString(id)).get(Stop.class);
     }
 
     public List<House> getHouses(int streetId) throws IOException {
-        Street street = getStreetClient.appendPath(Integer.toString(streetId)).get(Street.class);
+        Street street = new Client("/street/getstreet").appendPath(Integer.toString(streetId)).get(Street.class);
         return street.getHouses();
     }
 
     public List<MonitoredStopVisit> getMonitorStopVisits(int ruterStopId, String lineNo) throws IOException {
-        MonitoredStopVisit[] monitoredStopVisits = getRealtimeClient.appendPath(Integer.toString(ruterStopId))
+        MonitoredStopVisit[] monitoredStopVisits = new Client("stopvisit/getdepartures").appendPath(Integer.toString(ruterStopId))
                 .queryParam("linenames", lineNo)
                 .get(MonitoredStopVisit[].class);
         return Arrays.asList(monitoredStopVisits);
     }
+
     public List<Place> getPlaces(String partialPlacename) throws IOException {
-        Place[] places = getPlacesClient
+        Place[] places = new Client("/place/getplaces")
                 .appendPath(partialPlacename)
                 .queryParam("counties", "Oslo")
                 .queryParam("counties", "Akershus")
@@ -65,7 +59,7 @@ public class RuterApi {
     }
 
     public TravelResponse getTravels(Integer fromPlaceId, Integer fromX, Integer fromY, Integer toPlaceId, Integer toX, Integer toY, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
-        Client c = getTravelsClient
+        Client c = new Client("/travel/gettravels")
                 .queryParam("proposals", 6)
                 .queryParam("isAfter", isAfter)
                 .queryParam("time", formatDepartureOrArrivalTime(departureOrArrivalTime));

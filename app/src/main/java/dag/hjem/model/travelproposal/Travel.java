@@ -1,5 +1,8 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +33,9 @@ public class Travel {
             }
         }
 
-        String departureTime = Util.formatTime(ruterProposal.getDepartureTime());
-        String arrivalTime = Util.formatTime(ruterProposal.getArrivalTime());
         String totalTravelTime = Util.toHhMm(ruterProposal.getTotalTravelTime());
         List<String> remarks = ruterProposal.getRemarks();
-        travel.summary = new Summary(departureTime, arrivalTime, totalTravelTime, travel.sections, remarks);
+        travel.summary = new Summary(ruterProposal.getDepartureTime(), ruterProposal.getArrivalTime(), totalTravelTime, travel.sections, remarks);
         return travel;
     }
 
@@ -42,9 +43,9 @@ public class Travel {
         WaitingSection waitingSection = null;
 
         if (previousSection instanceof MovementSection && thisSection instanceof MovementSection) {
-            int thisDepartureTimeInMins = Util.timeToMins(((MovementSection) thisSection).getDepartureTime());
-            int previousArrivalTimeInMins = Util.timeToMins(((MovementSection) previousSection).getArrivalTime());
-            int waitingTime = thisDepartureTimeInMins - previousArrivalTimeInMins;
+            DateTime thisDepartureTime = ((MovementSection) thisSection).getDepartureTime();
+            DateTime previousArrivalTime = ((MovementSection) previousSection).getArrivalTime();
+            int waitingTime = Minutes.minutesBetween(previousArrivalTime, thisDepartureTime).getMinutes();
             if (waitingTime > 0) {
                 waitingSection = new WaitingSection(waitingTime);
             }

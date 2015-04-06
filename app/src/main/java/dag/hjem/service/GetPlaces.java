@@ -13,7 +13,7 @@ import dag.hjem.ruter.model.Place;
  */
 class GetPlaces extends Service {
     GetPlaces(Collector collector) {
-        super(collector);
+        super(collector, 1);
     }
 
     void getPlaces(String partialName) throws IOException {

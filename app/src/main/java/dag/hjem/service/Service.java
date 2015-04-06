@@ -10,10 +10,10 @@ public abstract class Service {
     protected ExecutorService executorService;
     protected Collector collector;
 
-    public Service(Collector collector) {
+    public Service(Collector collector, int nThreads) {
         this.collector = collector;
         this.ruterApi = new RuterApi();
-        this.executorService = Executors.newSingleThreadExecutor();
+        this.executorService = Executors.newFixedThreadPool(nThreads);
     }
 
 

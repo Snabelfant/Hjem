@@ -12,12 +12,12 @@ public abstract class Section {
                 return null;
             } else {
                 WalkingSection stage = new WalkingSection(minutes,
-                        Util.formatTime(ruterStage.getDepartureTime()),
-                        Util.formatTime(ruterStage.getArrivalTime()));
+                        ruterStage.getDepartureTime(),
+                        ruterStage.getArrivalTime());
                 return stage;
             }
         } else {
-            TravelSection stage = new TravelSection(Util.formatTime(ruterStage.getDepartureTime()), Util.formatTime(ruterStage.getArrivalTime()));
+            TravelSection stage = new TravelSection(ruterStage.getDepartureTime(), ruterStage.getArrivalTime());
             stage.setDepartureStop(ruterStage.getDepartureStopName(), ruterStage.getDepartureStopId());
             stage.setArrivalStopName(ruterStage.getArrivalStopName());
             stage.setTravelTime(Util.toHhMm(ruterStage.getTravelTime()));

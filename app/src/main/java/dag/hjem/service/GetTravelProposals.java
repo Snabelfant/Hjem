@@ -17,7 +17,7 @@ import dag.hjem.ruter.model.TravelResponse;
 
 class GetTravelProposals extends Service {
     GetTravelProposals(Collector collector) {
-        super(collector);
+        super(collector, 1);
     }
 
     void getTravelProposals(Location fromLocation, Location toLocation, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
@@ -30,9 +30,7 @@ class GetTravelProposals extends Service {
                 try {
                     TravelResponse travelResponse = ruterApi.getTravels(param.getFromId(), param.getFromX(), param.getFromY(),
                             param.getToId(), param.getToX(), param.getToY(), param.isAfter(), param.getDepartureOrArrivalTime());
-                    TravelSearchResult result = TravelSearchResult.fromRuter(param.getFromName(), param.getToName(), travelResponse);
-                    getRealtimeCalls(result.getTravels(), collector);
-                    return result;
+                    return TravelSearchResult.fromRuter(param.getFromName(), param.getToName(), travelResponse);
                 } catch (IOException e) {
                     return TravelSearchResult.fromException(e);
                 }
@@ -41,6 +39,7 @@ class GetTravelProposals extends Service {
             @Override
             protected void onPostExecute(TravelSearchResult result) {
                 collector.setTravelSearchResult(result);
+                getRealtimeCalls(result.getTravels(), collector);
             }
         };
 
