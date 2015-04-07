@@ -40,6 +40,9 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
         LinearLayout travelSectionsView = (LinearLayout) travelView.findViewById(R.id.travelsections);
         List<Section> sections = travel.getSections();
         View lastViewIfWalkingView = null;
+        View lastViewIfWaitingView = null;
+        Nesodden kirke -kattås 05:53 på aker brygge:
+        vente 10, gå 10
         for (Section section : sections) {
             View sectionView;
             if (section instanceof WalkingSection) {
@@ -47,7 +50,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                 sectionView = inflater.inflate(R.layout.walkingwaitingsection, parent, false);
 
                 TextView walkingTimeView = (TextView) sectionView.findViewById(R.id.walkingsection_walkingtime);
-                walkingTimeView.setText(Integer.toString(walkingSection.getWalkingTime()) + " min");
+                walkingTimeView.setText(Util.format(walkingSection.getWalkingTime()));
 
                 sectionView.findViewById(R.id.waitingsection_icon).setVisibility(View.GONE);
                 sectionView.findViewById(R.id.waitingsection_waitingtime).setVisibility(View.GONE);
@@ -68,7 +71,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                         waitingTimeView = (TextView) sectionView.findViewById(R.id.waitingsection_waitingtime);
                         travelSectionsView.addView(sectionView);
                     }
-                    waitingTimeView.setText(waitingSection.getWaitingTime() + " min");
+                    waitingTimeView.setText(Util.format(waitingSection.getWaitingTime()));
                 } else {
                     final TravelSection travelSection = (TravelSection) section;
                     sectionView = inflater.inflate(R.layout.travelsection, parent, false);
@@ -95,7 +98,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                     arrivalStopView.setText(travelSection.getArrivalStopName());
 
                     TextView travelTimeView = (TextView) sectionView.findViewById(R.id.travelsection_traveltime);
-                    travelTimeView.setText("(" + travelSection.getTravelTime() + ")");
+                    travelTimeView.setText(Util.format(travelSection.getTravelTime()));
 
                     Button deviationsButton = (Button) sectionView.findViewById(R.id.travelsection_deviations);
                     if (travelSection.hasDeviations()) {
@@ -142,10 +145,6 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
 
     private void fillSummary(View summaryView, ViewGroup parent, final Summary summary) {
         summaryView.setBackgroundColor(Color.YELLOW);
-        String totalTravelTime = new StringBuilder()
-                .append("(")
-                .append(summary.getTotalTravelTime())
-                .append(")").toString();
 
         TextView departureTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_departuretime);
         departureTimeView.setText(summary.getDepartureTimeFormatted());
@@ -154,7 +153,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
         arrivalTimeView.setText(summary.getArrivalTimeFormatted());
 
         TextView totalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_totaltime);
-        totalTimeView.setText(totalTravelTime);
+        totalTimeView.setText(Util.formathhmm(summary.getTotalTravelTime()));
 
         LinearLayout linesView = (LinearLayout) summaryView.findViewById(R.id.travelsummary_lines);
 

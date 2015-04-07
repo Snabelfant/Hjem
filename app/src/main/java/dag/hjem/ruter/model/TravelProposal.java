@@ -3,14 +3,17 @@ package dag.hjem.ruter.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
 
 import java.util.List;
+
+import dag.hjem.Util;
 
 public class TravelProposal {
     private DateTime departureTime;
     private DateTime arrivalTime;
     private List<String> remarks;
-    private String totalTravelTime;
+    private Duration totalTravelTime;
     private List<Stage> stages;
     private String zones;
 
@@ -24,17 +27,17 @@ public class TravelProposal {
         this.departureTime = new DateTime(departureTime, DateTimeZone.getDefault());
         this.arrivalTime = new DateTime(arrivalTime, DateTimeZone.getDefault());
         this.remarks = remarks;
-        this.totalTravelTime = totalTravelTime;
+        this.totalTravelTime = Util.toDuration(totalTravelTime);
         this.stages = stages;
         this.zones = zones;
     }
 
-    public String getTotalTravelTime() {
+    public Duration getTotalTravelTime() {
         return totalTravelTime;
     }
 
     public String toString() {
-        String s = departureTime.toString() + " - " + arrivalTime.toString() + " (" + totalTravelTime + ")";
+        String s = departureTime.toString() + " - " + arrivalTime.toString() + " (" + totalTravelTime.getStandardMinutes() + ")";
         for (Stage stage : stages) {
             s += "\n" + stage.toString();
         }

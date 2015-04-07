@@ -1,20 +1,21 @@
 package dag.hjem.model.travelproposal;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 public class WalkingSection extends MovementSection {
-    private int walkingTime;
+    private Duration walkingTime;
 
-    public WalkingSection(int walkingTime, DateTime departureTime, DateTime arrivalTime) {
+    public WalkingSection(Duration walkingTime, DateTime departureTime, DateTime arrivalTime) {
         super(departureTime, arrivalTime);
         this.walkingTime = walkingTime;
     }
 
-    public int getWalkingTime() {
+    public Duration getWalkingTime() {
         return walkingTime;
     }
 
     public String toString() {
-        return "  - Gå " + walkingTime + " (" + super.getDepartureTime() + " - " + super.getArrivalTime() + ")";
+        return "  - Gå " + walkingTime.getStandardMinutes() + " (" + super.getDepartureTime() + " - " + super.getArrivalTime() + ")";
     }
 }

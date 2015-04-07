@@ -1,5 +1,7 @@
 package dag.hjem.model.travelproposal;
 
+import org.joda.time.Duration;
+
 import dag.hjem.ruter.model.Deviation;
 import dag.hjem.ruter.model.Stage;
 
@@ -7,11 +9,11 @@ public abstract class Section {
 
     public static Section fromRuter(Stage ruterStage) {
         if (ruterStage.getTransportation() == dag.hjem.ruter.model.TransportationType.WALKING) {
-            int minutes = Util.toMinutes(ruterStage.getWalkingTime());
-            if (minutes == 0) {
+            Duration walkingTime = ruterStage.getWalkingTime();
+            if (walkingTime.getStandardMinutes() == 0) {
                 return null;
             } else {
-                WalkingSection stage = new WalkingSection(minutes,
+                WalkingSection stage = new WalkingSection(walkingTime,
                         ruterStage.getDepartureTime(),
                         ruterStage.getArrivalTime());
                 return stage;
@@ -20,7 +22,7 @@ public abstract class Section {
             TravelSection stage = new TravelSection(ruterStage.getDepartureTime(), ruterStage.getArrivalTime());
             stage.setDepartureStop(ruterStage.getDepartureStopName(), ruterStage.getDepartureStopId());
             stage.setArrivalStopName(ruterStage.getArrivalStopName());
-            stage.setTravelTime(Util.toHhMm(ruterStage.getTravelTime()));
+            stage.setTravelTime(ruterStage.getTravelTime());
             stage.setLine(ruterStage.getLineName(), TransportationType.fromRuter(ruterStage.getTransportation()));
             stage.setDestination(ruterStage.getDestination());
 

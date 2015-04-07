@@ -2,6 +2,8 @@ package dag.hjem.model.travelproposal;
 
 import org.joda.time.DateTime;
 
+import dag.hjem.Util;
+
 /**
  * Created by Dag on 21.03.2015.
  */
@@ -19,7 +21,7 @@ abstract class MovementSection extends Section {
     }
 
     public String getDepartureTimeFormatted() {
-        return Util.formatTime(departureTime);
+        return Util.format(departureTime);
     }
 
     public DateTime getArrivalTime() {
@@ -27,7 +29,7 @@ abstract class MovementSection extends Section {
     }
 
     public String getArrivalTimeFormatted() {
-        return Util.formatTime(arrivalTime);
+        return Util.format(arrivalTime);
     }
 
 }

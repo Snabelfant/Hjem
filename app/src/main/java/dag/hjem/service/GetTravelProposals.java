@@ -39,7 +39,9 @@ class GetTravelProposals extends Service {
             @Override
             protected void onPostExecute(TravelSearchResult result) {
                 collector.setTravelSearchResult(result);
-                getRealtimeCalls(result.getTravels(), collector);
+                if (result.getException() == null) {
+                    getRealtimeCalls(result.getTravels(), collector);
+                }
             }
         };
 

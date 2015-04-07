@@ -1,17 +1,19 @@
 package dag.hjem.model.travelproposal;
 
-public class WaitingSection extends Section {
-    private int waitingTime;
+import org.joda.time.Duration;
 
-    public WaitingSection(int waitingTime) {
+public class WaitingSection extends Section {
+    private Duration waitingTime;
+
+    public WaitingSection(Duration waitingTime) {
         this.waitingTime = waitingTime;
     }
 
-    public int getWaitingTime() {
+    public Duration getWaitingTime() {
         return waitingTime;
     }
 
     public String toString() {
-        return "  - Vent " + waitingTime;
+        return "  - Vent " + waitingTime.getStandardMinutes();
     }
 }

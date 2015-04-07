@@ -3,13 +3,16 @@ package dag.hjem.ruter.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
 
 import java.util.List;
+
+import dag.hjem.Util;
 
 public class Stage {
     private final XY departurePoint;
     private final XY arrivalPoint;
-    private final String walkingTime;
+    private final Duration walkingTime;
     private String destination;
     private ArrivalOrDepartureStop departureStop;
     private DateTime departureTime;
@@ -17,7 +20,7 @@ public class Stage {
     private String lineName;
     private TransportationType transportation;
     private String lineColour;
-    private String travelTime;
+    private Duration travelTime;
     private ArrivalOrDepartureStop arrivalStop;
     private DateTime arrivalTime;
     private List<Deviation> deviations;
@@ -59,12 +62,12 @@ public class Stage {
         this.lineColour = lineColour;
         this.operator = operator;
         this.remarks = remarks;
-        this.travelTime = travelTime;
+        this.travelTime = Util.toDuration(travelTime);
         this.tourId = tourId;
         this.tourLineId = tourLineId;
         this.arrivalPoint = arrivalPoint;
         this.departurePoint = departurePoint;
-        this.walkingTime = walkingTime;
+        this.walkingTime = Util.toDuration(walkingTime);
     }
 
     public String getDepartureStopName() {
@@ -93,7 +96,7 @@ public class Stage {
         }
     }
 
-    public String getWalkingTime() {
+    public Duration getWalkingTime() {
         return walkingTime;
     }
 
@@ -105,7 +108,7 @@ public class Stage {
         return arrivalTime;
     }
 
-    public String getTravelTime() {
+    public Duration getTravelTime() {
         return travelTime;
     }
 

@@ -1,7 +1,7 @@
 package dag.hjem.model.travelproposal;
 
 import org.joda.time.DateTime;
-import org.joda.time.Minutes;
+import org.joda.time.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +33,8 @@ public class Travel {
             }
         }
 
-        String totalTravelTime = Util.toHhMm(ruterProposal.getTotalTravelTime());
         List<String> remarks = ruterProposal.getRemarks();
-        travel.summary = new Summary(ruterProposal.getDepartureTime(), ruterProposal.getArrivalTime(), totalTravelTime, travel.sections, remarks);
+        travel.summary = new Summary(ruterProposal.getDepartureTime(), ruterProposal.getArrivalTime(), ruterProposal.getTotalTravelTime(), travel.sections, remarks);
         return travel;
     }
 
@@ -45,8 +44,8 @@ public class Travel {
         if (previousSection instanceof MovementSection && thisSection instanceof MovementSection) {
             DateTime thisDepartureTime = ((MovementSection) thisSection).getDepartureTime();
             DateTime previousArrivalTime = ((MovementSection) previousSection).getArrivalTime();
-            int waitingTime = Minutes.minutesBetween(previousArrivalTime, thisDepartureTime).getMinutes();
-            if (waitingTime > 0) {
+            Duration waitingTime = new Duration(previousArrivalTime, thisDepartureTime);
+            if (waitingTime.getStandardMinutes() > 0) {
                 waitingSection = new WaitingSection(waitingTime);
             }
         }
