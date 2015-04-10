@@ -81,8 +81,8 @@ public class PlaceListAdapter extends ArrayAdapter<Place> {
             v.setVisibility(View.GONE);
 
             ArrayAdapter<House> houseNoAdapter = new ArrayAdapter<>(PlaceListAdapter.this.getContext(),
-                    R.layout.spinner);
-            houseNoAdapter.setDropDownViewResource(R.layout.spinner);
+                    R.layout.travelselectionspinner);
+            houseNoAdapter.setDropDownViewResource(R.layout.travelselectionspinner);
             houseNoSpinner.setAdapter(houseNoAdapter);
             houseNoSpinner.setVisibility(View.VISIBLE);
             try {

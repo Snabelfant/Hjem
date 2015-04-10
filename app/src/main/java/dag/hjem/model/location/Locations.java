@@ -45,4 +45,15 @@ public class Locations {
         locationDao.addLocation(location);
     }
 
+    public List<Location> getAllLocations() throws IOException {
+        return new ArrayList<>(locationDao.getLocations());
+    }
+
+    public void update(int index, Location location) throws IOException {
+        locationDao.update(index, location);
+    }
+
+    public void remove(Location location) throws IOException {
+        locationDao.remove(location);
+    }
 }

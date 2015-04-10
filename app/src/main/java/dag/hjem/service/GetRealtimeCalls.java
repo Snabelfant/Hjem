@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import dag.hjem.model.travelproposal.RealtimeSearchResult;
 import dag.hjem.ruter.model.MonitoredStopVisit;
@@ -13,7 +14,8 @@ import dag.hjem.ruter.model.MonitoredStopVisit;
  * Created by Dag on 29.03.2015.
  */
 class GetRealtimeCalls extends Service {
-    Set<RealtimeCallId> candidates;
+    private AtomicInteger callsInProgress = new AtomicInteger(0);
+    private Set<RealtimeCallId> candidates;
 
     GetRealtimeCalls(Collector collector) {
         super(collector, 10);
@@ -50,9 +52,11 @@ class GetRealtimeCalls extends Service {
             @Override
             protected void onPostExecute(RealtimeSearchResult result) {
                 collector.setRealtimeSearchResult(result);
+                collector.setRealtimeCallProgress(callsInProgress.decrementAndGet());
             }
         };
 
+        collector.setRealtimeCallProgress(callsInProgress.incrementAndGet());
         task.executeOnExecutor(executorService, realtimeCallId);
     }
 

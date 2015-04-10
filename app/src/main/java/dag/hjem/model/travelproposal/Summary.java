@@ -6,18 +6,16 @@ import org.joda.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import dag.hjem.Util;
-
 public class Summary {
-    private DateTime departureTime;
-    private DateTime arrivalTime;
+    private DepartureOrArrivalTime departureTime;
+    private DepartureOrArrivalTime arrivalTime;
     private Duration totalTravelTime;
     private List<String> remarks;
     private List<Line> lines;
 
     public Summary(DateTime departureTime, DateTime arrivalTime, Duration totalTravelTime, List<Section> sections, List<String> remarks) {
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
+        this.departureTime = new DepartureOrArrivalTime(departureTime);
+        this.arrivalTime = new DepartureOrArrivalTime(arrivalTime);
         this.totalTravelTime = totalTravelTime;
         this.remarks = remarks;
 
@@ -30,20 +28,12 @@ public class Summary {
         }
     }
 
-    public DateTime getDepartureTime() {
+    public DepartureOrArrivalTime getDepartureTime() {
         return departureTime;
     }
 
-    public String getDepartureTimeFormatted() {
-        return Util.format(departureTime);
-    }
-
-    public DateTime getArrivalTime() {
+    public DepartureOrArrivalTime getArrivalTime() {
         return arrivalTime;
-    }
-
-    public String getArrivalTimeFormatted() {
-        return Util.format(arrivalTime);
     }
 
     public Duration getTotalTravelTime() {
@@ -75,5 +65,9 @@ public class Summary {
 
     public List<Line> getLines() {
         return lines;
+    }
+
+    public void setRealtimeDepartureTime(DateTime expectedDepartureTime) {
+        departureTime = new DepartureOrArrivalTime(expectedDepartureTime, true);
     }
 }

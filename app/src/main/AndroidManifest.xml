@@ -25,6 +25,10 @@
             android:name=".AddPlaceActivity"
             android:label="Nytt sted"
             android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".EditLocationsActivity"
+            android:label="Endre sted"
+            android:screenOrientation="landscape"></activity>
 
     </application>
 

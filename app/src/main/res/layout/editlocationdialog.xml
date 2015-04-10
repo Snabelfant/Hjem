@@ -17,7 +17,7 @@
             android:textSize="25dp"></TextView>
 
         <EditText
-            android:id="@+id/addplace_newname"
+            android:id="@+id/editlocation_newname"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:bufferType="editable"
@@ -25,4 +25,3 @@
             android:textSize="25dp"></EditText>
     </LinearLayout>
 </LinearLayout>
-

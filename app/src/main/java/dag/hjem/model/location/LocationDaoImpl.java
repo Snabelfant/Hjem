@@ -1,7 +1,6 @@
 package dag.hjem.model.location;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -36,9 +35,8 @@ public class LocationDaoImpl implements LocationDao {
     public void addLocation(Location location) throws IOException {
         List<Location> locations = loadLocations();
         locations.add(location);
-        Collections.sort(locations, locationComparator);
         saveLocations(locations);
-        Log.i("hjem", "La til " + location);
+        Util.log("La til " + location);
     }
 
     private List<Location> loadLocations() throws IOException {
@@ -53,17 +51,36 @@ public class LocationDaoImpl implements LocationDao {
         }
 
         List<Location> locationsAsList = new ArrayList<>(Arrays.asList(locations));
-        Log.i("hjem", file.exists() + " " + file.getAbsolutePath() + " loadlocations=" + locationsAsList.toString());
+        Util.log(file.exists() + " " + file.getAbsolutePath() + " loadlocations=" + locationsAsList.toString());
         return locationsAsList;
     }
 
     private void saveLocations(List<Location> locations) throws IOException {
+        Collections.sort(locations, locationComparator);
         Location[] locationsAsArray = locations.toArray(new Location[0]);
         ObjectMapper mapper = new ObjectMapper();
         File file = Util.getExternalFile(context, "Steder.json");
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(file, locationsAsArray);
-        Log.i("hjem", file.getAbsolutePath() + " save=" + locations.toString());
+        Util.log(file.getAbsolutePath() + " save=" + locations.toString());
+    }
+
+    @Override
+    public void update(int index, Location location) throws IOException {
+        List<Location> locations = loadLocations();
+        locations.set(index, location);
+        saveLocations(locations);
+        Util.log("Endret " + index + "; " + location);
+    }
+
+    @Override
+    public void remove(Location location) throws IOException {
+        List<Location> locations = loadLocations();
+        Util.log("Finnes " + location + ": " + locations.contains(location));
+        locations.remove(location);
+        saveLocations(locations);
+        Util.log("Slettet " + location);
+
     }
 
     private class LocationComparator implements Comparator<Location> {
@@ -71,6 +88,5 @@ public class LocationDaoImpl implements LocationDao {
         public int compare(Location lhs, Location rhs) {
             return lhs.getName().compareToIgnoreCase(rhs.getName());
         }
-
     }
 }

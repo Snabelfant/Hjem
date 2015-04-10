@@ -23,4 +23,8 @@ public class Collector {
     public void setRealtimeSearchResult(RealtimeSearchResult realtimeSearchResult) {
         throw new RuntimeException("setRealtimeSearchResult ikke implementert");
     }
+
+    public void setRealtimeCallProgress(int callsInProgress) {
+        throw new RuntimeException("setRealtimeCallProgress ikke implementert");
+    }
 }

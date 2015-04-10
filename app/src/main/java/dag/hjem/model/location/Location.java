@@ -1,5 +1,6 @@
 package dag.hjem.model.location;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
@@ -28,8 +29,20 @@ public abstract class Location implements Serializable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonIgnore
+    public abstract String getDetails();
+
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return name.equals(((Location) o).name);
     }
 }

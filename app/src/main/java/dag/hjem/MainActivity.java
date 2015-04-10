@@ -1,9 +1,9 @@
 package dag.hjem;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class MainActivity extends ActionBarActivity {
     private Spinner timeOptionSpinner;
     private Button findButton;
     private Locations locations;
+    private TextView realtimeProgessView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,24 +43,25 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
 
+        realtimeProgessView = (TextView) findViewById(R.id.realtimecallprogress);
+        realtimeProgessView.setBackgroundColor(Color.YELLOW);
         findButton = (Button) findViewById(R.id.finddepartures);
         fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
-        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner);
-        fromAdapter.setDropDownViewResource(R.layout.spinner);
+        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this, R.layout.travelselectionspinner);
+        fromAdapter.setDropDownViewResource(R.layout.travelselectionspinner);
         fromSpinner.setAdapter(fromAdapter);
 
         toSpinner = (Spinner) findViewById(R.id.toSpinner);
         ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner);
-        toAdapter.setDropDownViewResource(R.layout.spinner);
+                R.layout.travelselectionspinner);
+        toAdapter.setDropDownViewResource(R.layout.travelselectionspinner);
         toSpinner.setAdapter(toAdapter);
 
         timeOptionSpinner = (Spinner) findViewById(R.id.timeOptionsSpinner);
         List<TimeOption> timeOptions = TimeOption.getTimes();
         ArrayAdapter<TimeOption> timeOptionAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner, timeOptions);
-        timeOptionAdapter.setDropDownViewResource(R.layout.spinner);
+                R.layout.travelselectionspinner, timeOptions);
+        timeOptionAdapter.setDropDownViewResource(R.layout.travelselectionspinner);
         timeOptionSpinner.setAdapter(timeOptionAdapter);
 
         ListView travelList = (ListView) findViewById(R.id.travels);
@@ -73,7 +76,6 @@ public class MainActivity extends ActionBarActivity {
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 try {
                     Location fromLocation = (Location) fromSpinner.getSelectedItem();
                     Location toLocation = (Location) toSpinner.getSelectedItem();
@@ -110,12 +112,18 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.mainactivitymenu_add_place) {
             Intent addPlaceActivityIntent = new Intent(this, AddPlaceActivity.class);
             addPlaceActivityIntent.putExtra("gpsposition", Here.getCurrentPosition());
-            this.startActivityForResult(addPlaceActivityIntent, 12345);
+            this.startActivityForResult(addPlaceActivityIntent, 1);
             return true;
         }
 
         if (id == R.id.mainactivitymenu_settings) {
-            Toast.makeText(this, "kanskje senere...", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Innstillinger...", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        if (id == R.id.mainactivitymenu_edit_locations) {
+            Intent editLocationsIntent = new Intent(this, EditLocationsActivity.class);
+            this.startActivityForResult(editLocationsIntent, 2);
             return true;
         }
 
@@ -146,7 +154,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public void setTravelSearchResult(TravelSearchResult result) {
-            Log.i("hjem", "TR=" + result.toString());
+            Util.log("TR=" + result.toString());
 
             if (result.getException() != null) {
                 YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
@@ -168,7 +176,20 @@ public class MainActivity extends ActionBarActivity {
             if (result.getException() != null) {
                 YesNoCancel.show(MainActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);
             } else {
-                Log.i("hjem", result.toString());
+                Util.log("RSS=" + result.toString());
+                travelListAdapter.updateRealtime(result);
+            }
+        }
+
+        @Override
+        public void setRealtimeCallProgress(int callsInProgress) {
+            Util.log("RCP=" + callsInProgress);
+
+            if (callsInProgress == 0) {
+                realtimeProgessView.setVisibility(View.GONE);
+            } else {
+                realtimeProgessView.setVisibility(View.VISIBLE);
+                realtimeProgessView.setText(Integer.toString(callsInProgress));
             }
         }
     }

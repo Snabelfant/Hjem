@@ -33,4 +33,9 @@ public class UtmLocation extends Location {
                 ", y=" + y +
                 '}';
     }
+
+    @Override
+    public String getDetails() {
+        return x + "/" + y;
+    }
 }

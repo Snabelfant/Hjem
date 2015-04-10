@@ -30,4 +30,9 @@ public class RuterLocation extends Location {
     public String getDistrict() {
         return district;
     }
+
+    @Override
+    public String getDetails() {
+        return district;
+    }
 }

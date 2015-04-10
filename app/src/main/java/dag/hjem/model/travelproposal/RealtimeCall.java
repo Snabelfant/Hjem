@@ -20,6 +20,18 @@ public class RealtimeCall {
         this.destinationName = destinationName;
     }
 
+    public DateTime getAimedDepartureTime() {
+        return aimedDepartureTime;
+    }
+
+    public DateTime getExpectedDepartureTime() {
+        return expectedDepartureTime;
+    }
+
+    public String getDestinationName() {
+        return destinationName;
+    }
+
     @Override
     public String toString() {
         return "Rec=" + recordedAt + ", InC=" + isInCongestion + ", aimedDep=" + aimedDepartureTime + ", expDep=" + expectedDepartureTime + ", dest=" + destinationName;

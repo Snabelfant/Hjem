@@ -1,12 +1,13 @@
 package dag.hjem.rest;
 
 import android.net.Uri;
-import android.util.Log;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.util.ISO8601DateFormat;
 
 import java.io.IOException;
+
+import dag.hjem.Util;
 
 public class Client {
     private ObjectMapper mapper;
@@ -48,9 +49,9 @@ public class Client {
     public <T> T get(Class<T> c) throws IOException {
         String url = uriBuilder.build().toString();
         url += encodedQueries.toString();
-        Log.i("hjem", url);
+        Util.log(url);
         String content = UrlReader.get(url);
-        Log.i("hjem", content);
+        Util.log(content);
         return mapper.readValue(content, c);
     }
 

@@ -86,6 +86,10 @@ public class TravelSection extends MovementSection {
         return s.toString();
     }
 
+    public void setRealtimeDepartureTime(DateTime realtimeDepartureTime) {
+        super.setDepartureTime(new DepartureOrArrivalTime(realtimeDepartureTime, true));
+    }
+
     public boolean hasDeviations() {
         return deviations != null && deviations.size() > 0;
     }

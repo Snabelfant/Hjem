@@ -27,7 +27,9 @@ public class RealtimeSearchResult {
 
             if (monitoredVehicleJourney.isMonitored()) {
                 MonitoredCall monitoredCall = monitoredVehicleJourney.getMonitoredCall();
-                RealtimeCall realtimeCall = new RealtimeCall(monitoredStopVisit.getRecordedAtTime(), monitoredVehicleJourney.isInCongestion(), monitoredCall.getAimedDepartureTime(), monitoredCall.getExpectedDepartureTime(), monitoredVehicleJourney.getDestinationName());
+                RealtimeCall realtimeCall = new RealtimeCall(monitoredStopVisit.getRecordedAtTime(), monitoredVehicleJourney.isInCongestion(),
+                        monitoredCall.getAimedDepartureTime(), monitoredCall.getExpectedDepartureTime(),
+                        monitoredVehicleJourney.getDestinationName());
 
                 realtimeSearchResult.realtimeCalls.add(realtimeCall);
             }
@@ -42,6 +44,18 @@ public class RealtimeSearchResult {
         return searchResult;
     }
 
+    public int getRuterStopId() {
+        return ruterStopId;
+    }
+
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public List<RealtimeCall> getRealtimeCalls() {
+        return realtimeCalls;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -49,6 +63,10 @@ public class RealtimeSearchResult {
                 .append(realtimeCalls.size())
                 .append("ex=")
                 .append(exception)
+                .append("\n")
+                .append(lineNo)
+                .append(" ")
+                .append(ruterStopId)
                 .append("\n");
 
         for (RealtimeCall realtimeCall : realtimeCalls) {

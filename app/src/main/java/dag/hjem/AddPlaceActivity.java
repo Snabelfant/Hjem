@@ -187,7 +187,7 @@ public class AddPlaceActivity extends Activity {
 
         @Override
         public void setPlaceSearchResult(PlaceSearchResult result) {
-            Log.i("hjem", "PS=" + result.toString());
+            Util.log("PS=" + result.toString());
 
             if (result.getException() != null) {
                 YesNoCancel.show(AddPlaceActivity.this, "Oi!", result.getException().toString(), YesNoCancel.EMPTY, null, null);

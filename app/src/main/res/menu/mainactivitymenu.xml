@@ -5,10 +5,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/mainactivitymenu_add_place"
+        android:icon="@drawable/nyttsted"
         android:title="+ sted"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mainactivitymenu_edit_locations"
+        android:icon="@drawable/endrested"
+        android:title="Redi. sted"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/mainactivitymenu_settings"
+        android:icon="@drawable/instillinger"
         android:title="Innstillinger"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom" />
 </menu>

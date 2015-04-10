@@ -6,6 +6,7 @@ import org.joda.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import dag.hjem.Util;
 import dag.hjem.ruter.model.Stage;
 import dag.hjem.ruter.model.TravelProposal;
 
@@ -42,9 +43,9 @@ public class Travel {
         WaitingSection waitingSection = null;
 
         if (previousSection instanceof MovementSection && thisSection instanceof MovementSection) {
-            DateTime thisDepartureTime = ((MovementSection) thisSection).getDepartureTime();
-            DateTime previousArrivalTime = ((MovementSection) previousSection).getArrivalTime();
-            Duration waitingTime = new Duration(previousArrivalTime, thisDepartureTime);
+            DepartureOrArrivalTime thisDepartureTime = ((MovementSection) thisSection).getDepartureTime();
+            DepartureOrArrivalTime previousArrivalTime = ((MovementSection) previousSection).getArrivalTime();
+            Duration waitingTime = new Duration(previousArrivalTime.getTime(), thisDepartureTime.getTime());
             if (waitingTime.getStandardMinutes() > 0) {
                 waitingSection = new WaitingSection(waitingTime);
             }
@@ -70,5 +71,39 @@ public class Travel {
         }
 
         return s.toString();
+    }
+
+    public boolean setRealtime(String lineNo, int ruterStopId, RealtimeCall realtimeCall) {
+        boolean resultWasUsed = false;
+        boolean isFirstTravelSection = true;
+
+        for (Section section : sections) {
+            if (section instanceof TravelSection) {
+                TravelSection travelSection = (TravelSection) section;
+
+                boolean isMatchingSection =
+                        lineNo.equals(travelSection.getLine().getLineName()) &&
+                                ruterStopId == travelSection.getDepartureStopId() &&
+                                travelSection.getDestination().equals(realtimeCall.getDestinationName());
+
+                if (isMatchingSection) {
+                    DateTime aimedDepartureTime = realtimeCall.getAimedDepartureTime();
+                    DateTime scheduledDeparture = travelSection.getDepartureTime().getTime();
+                    if (Util.departureOrArrivalTimesEqual(aimedDepartureTime, scheduledDeparture)) {
+                        Util.log("FUNNET=" + travelSection.getArrivalStopName() + ":" + realtimeCall.getExpectedDepartureTime().toString() + "/" + aimedDepartureTime.toString() + "/" + scheduledDeparture.toString());
+                        travelSection.setRealtimeDepartureTime(realtimeCall.getExpectedDepartureTime());
+
+                        if (isFirstTravelSection) {
+                            summary.setRealtimeDepartureTime(realtimeCall.getExpectedDepartureTime());
+                        }
+                        resultWasUsed = true;
+                    }
+                }
+
+                isFirstTravelSection = false;
+            }
+        }
+
+        return resultWasUsed;
     }
 }

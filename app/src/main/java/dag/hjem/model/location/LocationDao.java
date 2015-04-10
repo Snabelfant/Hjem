@@ -11,4 +11,8 @@ interface LocationDao extends Serializable {
     List<Location> getLocations() throws IOException;
 
     void addLocation(Location location) throws IOException;
+
+    void update(int index, Location location) throws IOException;
+
+    void remove(Location location) throws IOException;
 }

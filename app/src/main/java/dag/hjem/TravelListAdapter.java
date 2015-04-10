@@ -13,7 +13,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dag.hjem.model.travelproposal.DepartureOrArrivalTime;
 import dag.hjem.model.travelproposal.Line;
+import dag.hjem.model.travelproposal.RealtimeCall;
+import dag.hjem.model.travelproposal.RealtimeSearchResult;
 import dag.hjem.model.travelproposal.Section;
 import dag.hjem.model.travelproposal.Summary;
 import dag.hjem.model.travelproposal.Travel;
@@ -40,9 +43,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
         LinearLayout travelSectionsView = (LinearLayout) travelView.findViewById(R.id.travelsections);
         List<Section> sections = travel.getSections();
         View lastViewIfWalkingView = null;
-        View lastViewIfWaitingView = null;
-        Nesodden kirke -kattås 05:53 på aker brygge:
-        vente 10, gå 10
+//        Nesodden kirke -kattås 05:53 på aker brygge:   vente 10, gå 10
         for (Section section : sections) {
             View sectionView;
             if (section instanceof WalkingSection) {
@@ -51,7 +52,8 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
 
                 TextView walkingTimeView = (TextView) sectionView.findViewById(R.id.walkingsection_walkingtime);
                 walkingTimeView.setText(Util.format(walkingSection.getWalkingTime()));
-
+                walkingTimeView.setBackgroundColor(Settings.Color.walkingSection);
+                sectionView.setBackgroundColor(Settings.Color.walkingSection);
                 sectionView.findViewById(R.id.waitingsection_icon).setVisibility(View.GONE);
                 sectionView.findViewById(R.id.waitingsection_waitingtime).setVisibility(View.GONE);
                 travelSectionsView.addView(sectionView);
@@ -69,6 +71,8 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                         sectionView.findViewById(R.id.walkingsection_icon).setVisibility(View.GONE);
                         sectionView.findViewById(R.id.walkingsection_walkingtime).setVisibility(View.GONE);
                         waitingTimeView = (TextView) sectionView.findViewById(R.id.waitingsection_waitingtime);
+                        sectionView.setBackgroundColor(Settings.Color.walkingSection);
+
                         travelSectionsView.addView(sectionView);
                     }
                     waitingTimeView.setText(Util.format(waitingSection.getWaitingTime()));
@@ -76,8 +80,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                     final TravelSection travelSection = (TravelSection) section;
                     sectionView = inflater.inflate(R.layout.travelsection, parent, false);
 
-                    TextView departureTime = (TextView) sectionView.findViewById(R.id.travelsection_departuretime);
-                    departureTime.setText(travelSection.getDepartureTimeFormatted());
+                    setDepartureOrArrivalTime(travelSection.getDepartureTime(), sectionView, R.id.travelsection_departuretime);
 
                     TextView departureStop = (TextView) sectionView.findViewById(R.id.travelsection_departurestop);
                     departureStop.setText(travelSection.getDepartureStopName());
@@ -91,8 +94,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                     TextView destinationView = (TextView) sectionView.findViewById(R.id.travelsection_destination);
                     destinationView.setText(travelSection.getDestination());
 
-                    TextView arrivalTimeView = (TextView) sectionView.findViewById(R.id.travelsection_arriveltime);
-                    arrivalTimeView.setText(travelSection.getArrivalTimeFormatted());
+                    setDepartureOrArrivalTime(travelSection.getArrivalTime(), sectionView, R.id.travelsection_arriveltime);
 
                     TextView arrivalStopView = (TextView) sectionView.findViewById(R.id.travelsection_arrivalstop);
                     arrivalStopView.setText(travelSection.getArrivalStopName());
@@ -112,14 +114,11 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                         deviationsButton.setVisibility(View.GONE);
                     }
 
-
                     travelSectionsView.addView(sectionView);
                 }
 
                 lastViewIfWalkingView = null;
             }
-
-
         }
 
         travelSectionsView.setVisibility(View.GONE);
@@ -143,14 +142,33 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
 
     }
 
+    public void updateRealtime(RealtimeSearchResult realtimeSearchResult) {
+        List<RealtimeCall> realtimeCalls = realtimeSearchResult.getRealtimeCalls();
+        if (realtimeCalls.size() == 0) {
+            return;
+        }
+
+        String lineNo = realtimeSearchResult.getLineNo();
+        int ruterStopId = realtimeSearchResult.getRuterStopId();
+
+        for (RealtimeCall realtimeCall : realtimeCalls) {
+
+            for (int i = 0; i < getCount(); i++) {
+                Travel travel = getItem(i);
+                if (travel.setRealtime(lineNo, ruterStopId, realtimeCall)) {
+                    break;
+                }
+
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     private void fillSummary(View summaryView, ViewGroup parent, final Summary summary) {
-        summaryView.setBackgroundColor(Color.YELLOW);
+        summaryView.setBackgroundColor(Settings.Color.summary);
 
-        TextView departureTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_departuretime);
-        departureTimeView.setText(summary.getDepartureTimeFormatted());
-
-        TextView arrivalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_arrivaltime);
-        arrivalTimeView.setText(summary.getArrivalTimeFormatted());
+        setDepartureOrArrivalTime(summary.getDepartureTime(), summaryView, R.id.travelsummary_departuretime);
+        setDepartureOrArrivalTime(summary.getArrivalTime(), summaryView, R.id.travelsummary_arrivaltime);
 
         TextView totalTimeView = (TextView) summaryView.findViewById(R.id.travelsummary_totaltime);
         totalTimeView.setText(Util.formathhmm(summary.getTotalTravelTime()));
@@ -180,5 +198,15 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
             remarksButton.setVisibility(View.GONE);
         }
 
+    }
+
+    private void setDepartureOrArrivalTime(DepartureOrArrivalTime departureOrArrivalTime, View textView, int id) {
+        TextView view = (TextView) textView.findViewById(id);
+        view.setText(departureOrArrivalTime.format());
+        if (departureOrArrivalTime.isRealtime()) {
+            view.setTextColor(Color.GREEN);
+        } else {
+            view.setTextColor(Color.BLUE);
+        }
     }
 }

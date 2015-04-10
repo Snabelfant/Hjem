@@ -25,6 +25,14 @@ public class MonitoredCall {
         this.expectedDepartureTime = new DateTime(expectedDepartureTime, DateTimeZone.getDefault());
     }
 
+    public DateTime getAimedArrivalTime() {
+        return aimedArrivalTime;
+    }
+
+    public DateTime getExpectedArrivalTime() {
+        return expectedArrivalTime;
+    }
+
     public DateTime getAimedDepartureTime() {
         return aimedDepartureTime;
     }

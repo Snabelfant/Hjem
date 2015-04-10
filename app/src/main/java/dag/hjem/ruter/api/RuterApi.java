@@ -1,13 +1,12 @@
 package dag.hjem.ruter.api;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import dag.hjem.Util;
 import dag.hjem.rest.Client;
 import dag.hjem.ruter.model.House;
 import dag.hjem.ruter.model.MonitoredStopVisit;
@@ -26,7 +25,7 @@ public class RuterApi {
 
     public boolean heartBeat() throws IOException {
         String result = new Client("/heartbeat/index").get(String.class);
-        Log.i("hjem", result);
+        Util.log(result);
         return "Pong".equals(result);
     }
 
