@@ -94,7 +94,7 @@ public class Travel {
                         travelSection.setRealtimeDepartureTime(realtimeCall.getExpectedDepartureTime());
 
                         if (isFirstTravelSection) {
-                            summary.setRealtimeDepartureTime(realtimeCall.getExpectedDepartureTime());
+                            summary.adjustRealtimeDepartureTime(new Duration(realtimeCall.getExpectedDepartureTime(), realtimeCall.getAimedDepartureTime()));
                         }
                         resultWasUsed = true;
                     }

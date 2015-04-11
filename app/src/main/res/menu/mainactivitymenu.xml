@@ -15,7 +15,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/mainactivitymenu_settings"
-        android:icon="@drawable/instillinger"
+        android:icon="@drawable/innstillinger"
         android:title="Innstillinger"
         app:showAsAction="ifRoom" />
 </menu>

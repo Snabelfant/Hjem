@@ -1,36 +1,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/WalkingSection"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <TextView
+        style="@style/TravelSection.Element"
+        android:layout_width="30dp"
+        android:layout_height="match_parent" />
+
     <ImageView
         android:id="@+id/walkingsection_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center_vertical"
+        style="@style/WalkingSection.Element"
+        android:layout_width="@dimen/iconwidth"
         android:src="@drawable/ga" />
 
     <TextView
         android:id="@+id/walkingsection_walkingtime"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:paddingLeft="5dp"
-        android:singleLine="true"
-        android:textSize="20dp" />
+        style="@style/WalkingSection.Element"
+        android:layout_width="wrap_content"
+        android:gravity="left"
+        android:paddingLeft="5dp" />
 
     <ImageView
         android:id="@+id/waitingsection_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center_vertical"
+        style="@style/WalkingSection.Element"
+        android:layout_width="@dimen/iconwidth"
+        android:paddingLeft="5dp"
         android:src="@drawable/vent" />
 
     <TextView
         android:id="@+id/waitingsection_waitingtime"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
-        android:paddingLeft="5dp"
-        android:singleLine="true"
-        android:textSize="20dp" />
+        style="@style/WalkingSection.Element"
+        android:layout_width="wrap_content"
+        android:paddingLeft="5dp" />
 
 </LinearLayout>

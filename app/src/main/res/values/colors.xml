@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="default_textcolor" type="color">#ff0000ff</item>
+    <item name="travelselection_background" type="color">#fffff9c4</item>
+    <item name="summary_background" type="color">#ffffdb4d</item>
+    <item name="travelsection_background" type="color">#fffff9c4</item>
+    <item name="walkingsection_backhround" type="color">#ffffeda9</item>
+    <item name="obs_background" type="color">#ffffff00</item>
+    <item name="line_background" type="color">#ff0000ff</item>
+    <item name="line_textcolor" type="color">#ffffffff</item>
+
+</resources>
+

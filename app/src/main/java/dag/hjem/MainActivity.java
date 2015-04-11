@@ -1,7 +1,6 @@
 package dag.hjem;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
+import dag.hjem.gps.Positioning;
 import dag.hjem.model.TimeDirection;
 import dag.hjem.model.TimeOption;
 import dag.hjem.model.location.Here;
@@ -34,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
     private Button findButton;
     private Locations locations;
     private TextView realtimeProgessView;
+    private Positioning positioning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,9 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setIcon(R.drawable.hjem32);
         getSupportActionBar().setTitle(" Hjem");
 
+        positioning = new Positioning(this, Here.getGpsObserver());
+
         realtimeProgessView = (TextView) findViewById(R.id.realtimecallprogress);
-        realtimeProgessView.setBackgroundColor(Color.YELLOW);
         findButton = (Button) findViewById(R.id.finddepartures);
         fromSpinner = (Spinner) findViewById(R.id.fromSpinner);
         ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this, R.layout.travelselectionspinner);

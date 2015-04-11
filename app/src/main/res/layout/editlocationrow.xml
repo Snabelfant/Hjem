@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AddPlace"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/rowheight"
     android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/editlocation_name"
+        style="@style/AddPlace"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"></TextView>
+        android:layout_height="match_parent"></TextView>
 
     <TextView
         android:id="@+id/editlocation_details"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:singleLine="true"
-        android:textSize="20dp"></TextView>
+        style="@style/AddPlace"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:singleLine="true"></TextView>
 </LinearLayout>
 

@@ -52,8 +52,6 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
 
                 TextView walkingTimeView = (TextView) sectionView.findViewById(R.id.walkingsection_walkingtime);
                 walkingTimeView.setText(Util.format(walkingSection.getWalkingTime()));
-                walkingTimeView.setBackgroundColor(Settings.Color.walkingSection);
-                sectionView.setBackgroundColor(Settings.Color.walkingSection);
                 sectionView.findViewById(R.id.waitingsection_icon).setVisibility(View.GONE);
                 sectionView.findViewById(R.id.waitingsection_waitingtime).setVisibility(View.GONE);
                 travelSectionsView.addView(sectionView);
@@ -71,7 +69,6 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
                         sectionView.findViewById(R.id.walkingsection_icon).setVisibility(View.GONE);
                         sectionView.findViewById(R.id.walkingsection_walkingtime).setVisibility(View.GONE);
                         waitingTimeView = (TextView) sectionView.findViewById(R.id.waitingsection_waitingtime);
-                        sectionView.setBackgroundColor(Settings.Color.walkingSection);
 
                         travelSectionsView.addView(sectionView);
                     }
@@ -165,8 +162,6 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
     }
 
     private void fillSummary(View summaryView, ViewGroup parent, final Summary summary) {
-        summaryView.setBackgroundColor(Settings.Color.summary);
-
         setDepartureOrArrivalTime(summary.getDepartureTime(), summaryView, R.id.travelsummary_departuretime);
         setDepartureOrArrivalTime(summary.getArrivalTime(), summaryView, R.id.travelsummary_arrivaltime);
 
@@ -204,7 +199,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
         TextView view = (TextView) textView.findViewById(id);
         view.setText(departureOrArrivalTime.format());
         if (departureOrArrivalTime.isRealtime()) {
-            view.setTextColor(Color.GREEN);
+            view.setTextColor(Color.RED);
         } else {
             view.setTextColor(Color.BLUE);
         }

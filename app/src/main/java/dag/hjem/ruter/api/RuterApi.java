@@ -1,9 +1,11 @@
 package dag.hjem.ruter.api;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import dag.hjem.Util;
@@ -57,7 +59,7 @@ public class RuterApi {
         return Arrays.asList(places);
     }
 
-    public TravelResponse getTravels(Integer fromPlaceId, Integer fromX, Integer fromY, Integer toPlaceId, Integer toX, Integer toY, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
+    public TravelResponse getTravels(Integer fromPlaceId, Integer fromX, Integer fromY, Integer toPlaceId, Integer toX, Integer toY, boolean isAfter, DateTime departureOrArrivalTime) throws IOException {
         Client c = new Client("/travel/gettravels")
                 .queryParam("proposals", 6)
                 .queryParam("isAfter", isAfter)
@@ -82,7 +84,8 @@ public class RuterApi {
         return "(X=" + x + ",Y=" + y + ")";
     }
 
-    private String formatDepartureOrArrivalTime(Calendar departureOrArrivalTime) {
-        return new SimpleDateFormat("ddMMyyyyHHmmss").format(departureOrArrivalTime.getTime());
+    private String formatDepartureOrArrivalTime(DateTime departureOrArrivalTime) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("ddMMyyyyHHmmss");
+        return formatter.print(departureOrArrivalTime);
     }
 }

@@ -1,7 +1,8 @@
 package dag.hjem.service;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
-import java.util.Calendar;
 
 import dag.hjem.model.location.Location;
 
@@ -18,7 +19,7 @@ public class TravelService {
         getPlaces.getPlaces(partialName);
     }
 
-    public void getTravelProposals(Location fromLocation, Location toLocation, boolean isAfter, Calendar departureOrArrivalTime, Collector collector) throws IOException {
+    public void getTravelProposals(Location fromLocation, Location toLocation, boolean isAfter, DateTime departureOrArrivalTime, Collector collector) throws IOException {
         GetTravelProposals getTravelProposals = new GetTravelProposals(collector);
         getTravelProposals.getTravelProposals(fromLocation, toLocation, isAfter, departureOrArrivalTime);
     }

@@ -67,7 +67,7 @@ public class Summary {
         return lines;
     }
 
-    public void setRealtimeDepartureTime(DateTime expectedDepartureTime) {
-        departureTime = new DepartureOrArrivalTime(expectedDepartureTime, true);
+    public void adjustRealtimeDepartureTime(Duration difference) {
+        departureTime = new DepartureOrArrivalTime(departureTime.getTime().plus(difference), true);
     }
 }

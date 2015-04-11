@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -49,7 +48,6 @@ public class AddPlaceActivity extends Activity {
         saveGpsPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddPlaceActivity.this, "Lagre gps...", Toast.LENGTH_LONG).show();
                 Bundle b = new Bundle();
                 b.putSerializable("utmposition", lastKnownGpsPosition);
                 AddPlaceDialogFragment addPlaceDialogFragment = new AddPlaceDialogFragment();

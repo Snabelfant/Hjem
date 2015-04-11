@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TravelSection"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <TextView
+        style="@style/TravelSection.Element"
+        android:layout_width="30dp"
+        android:layout_height="match_parent" />
+
     <LinearLayout
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/travelsection_departuretime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            style="@style/TravelSection.Element.Time" />
 
         <TextView
             android:id="@+id/travelsection_arriveltime"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            style="@style/TravelSection.Element.Time" />
     </LinearLayout>
 
     <LinearLayout
@@ -29,21 +31,11 @@
 
         <TextView
             android:id="@+id/travelsection_departurestop"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:paddingLeft="5dp"
-            android:singleLine="true"
-            android:textSize="20dp" />
+            style="@style/TravelSection.Element.Stop" />
 
         <TextView
             android:id="@+id/travelsection_arrivalstop"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:paddingLeft="5dp"
-            android:singleLine="true"
-            android:textSize="20dp" />
+            style="@style/TravelSection.Element.Stop" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,32 +50,16 @@
 
             <ImageView
                 android:id="@+id/travelsection_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
+                style="@style/LineIcon"
                 android:src="@drawable/vent" />
 
             <TextView
                 android:id="@+id/travelsection_lineno"
-                android:layout_width="45dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="#ff0000ff"
-                android:paddingLeft="5dp"
-                android:singleLine="true"
-                android:textColor="#ffffffff"
-                android:textSize="20dp" />
+                style="@style/LineName" />
 
             <TextView
                 android:id="@+id/travelsection_destination"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:background="#ff0000ff"
-                android:ellipsize="marquee"
-                android:paddingLeft="5dp"
-                android:singleLine="true"
-                android:textColor="#ffffffff"
-                android:textSize="20dp" />
+                style="@style/LineDestination" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,20 +69,17 @@
 
             <TextView
                 android:id="@+id/travelsection_traveltime"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textSize="20dp" />
-
+                style="@style/TravelSection.Element"
+                android:layout_width="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/travelsection_deviations"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:background="#ffffff00"
-        android:text="!"
-        android:textSize="20dp" />
+        style="@style/StandardButton"
+        android:layout_width="match_parent"
+        android:background="@color/obs_background"
+        android:text="!" />
 
 </LinearLayout>
 

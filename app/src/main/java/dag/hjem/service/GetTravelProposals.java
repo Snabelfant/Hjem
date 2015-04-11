@@ -2,8 +2,9 @@ package dag.hjem.service;
 
 import android.os.AsyncTask;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 
 import dag.hjem.model.location.Location;
@@ -20,7 +21,7 @@ class GetTravelProposals extends Service {
         super(collector, 1);
     }
 
-    void getTravelProposals(Location fromLocation, Location toLocation, boolean isAfter, Calendar departureOrArrivalTime) throws IOException {
+    void getTravelProposals(Location fromLocation, Location toLocation, boolean isAfter, DateTime departureOrArrivalTime) throws IOException {
         GetTravelProposalsParams params = new GetTravelProposalsParams(fromLocation, toLocation, isAfter, departureOrArrivalTime);
         AsyncTask<GetTravelProposalsParams, Integer, TravelSearchResult> task = new AsyncTask<GetTravelProposalsParams, Integer, TravelSearchResult>() {
 
@@ -74,9 +75,9 @@ class GetTravelProposals extends Service {
         Integer toX = null;
         Integer toY = null;
         boolean isAfter;
-        Calendar departureOrArrivalTime;
+        DateTime departureOrArrivalTime;
 
-        protected GetTravelProposalsParams(Location fromLocation, Location toLocation, boolean isAfter, Calendar departureOrArrivalTime) {
+        protected GetTravelProposalsParams(Location fromLocation, Location toLocation, boolean isAfter, DateTime departureOrArrivalTime) {
             fromName = fromLocation.getName();
             toName = toLocation.getName();
             if (fromLocation instanceof RuterLocation) {
@@ -134,7 +135,7 @@ class GetTravelProposals extends Service {
             return isAfter;
         }
 
-        public Calendar getDepartureOrArrivalTime() {
+        public DateTime getDepartureOrArrivalTime() {
             return departureOrArrivalTime;
         }
 

@@ -4,25 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="5dp"
-        android:layout_height="match_parent" />
-
     <ImageView
         android:id="@+id/travelsummary_line_icon"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        style="@style/LineIcon" />
 
     <TextView
         android:id="@+id/travelsummary_line_lineno"
-        android:layout_width="45dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#ff0000ff"
-        android:paddingLeft="5dp"
-        android:textColor="#ffffffff"
-        android:textSize="20dp" />
+        style="@style/LineName" />
 
 
 </LinearLayout>

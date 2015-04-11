@@ -6,34 +6,25 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/travelsummary"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal">
+        style="@style/SummaryLine">
 
         <TextView
             android:id="@+id/travelsummary_departuretime"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            style="@style/SummaryLine.Element.Time" />
 
         <TextView
+            style="@style/SummaryLine.Element"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" - "
-            android:textSize="20dp" />
+            android:text=" - " />
 
         <TextView
             android:id="@+id/travelsummary_arrivaltime"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            style="@style/SummaryLine.Element.Time" />
 
         <TextView
             android:id="@+id/travelsummary_totaltime"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:textSize="20dp" />
+            style="@style/SummaryLine.Element.Duration" />
+        />
 
         <LinearLayout
             android:id="@+id/travelsummary_lines"
@@ -43,10 +34,9 @@
 
         <Button
             android:id="@+id/travelsummary_remarks"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:text="!"
-            android:textSize="20dp" />
+            style="@style/StandardButton"
+            android:layout_width="@dimen/rowheight"
+            android:text="!" />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

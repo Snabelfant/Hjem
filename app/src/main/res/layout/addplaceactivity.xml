@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AddPlace"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/addplace_gps"
-            android:layout_width="200dp"
+            style="@style/StandardButton"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Gps-posisjon"
-            android:textSize="25dp" />
+            android:text="Gps-posisjon" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/rowheight"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/AddPlace"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Slå opp" />
+            android:text="Slå opp: " />
 
         <EditText
             android:id="@+id/placesearchterm"
+            style="@style/AddPlace"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:bufferType="editable"
             android:imeOptions="actionSearch"
-            android:inputType="text" />
+            android:inputType="text"
+            android:paddingLeft="5dp" />
     </LinearLayout>
 
     <ListView
         android:id="@+id/placesfound"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/rowheight"
         android:layout_weight="1"
-        android:drawSelectorOnTop="false" />
+        android:drawSelectorOnTop="true" />
 </LinearLayout>

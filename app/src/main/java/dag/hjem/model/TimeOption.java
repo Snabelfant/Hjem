@@ -1,7 +1,8 @@
 package dag.hjem.model;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static dag.hjem.model.TimeDirection.AFTER;
@@ -12,39 +13,26 @@ import static dag.hjem.model.TimeDirection.BEFORE;
  */
 public class TimeOption {
     private TimeDirection timeDirection;
-    private int offsetInMinutes;
+    private int offsetInHours;
     private String name;
 
-    public TimeOption(TimeDirection timeDirection, int offsetInMinutes, String name) {
+    public TimeOption(TimeDirection timeDirection, int offsetInHours, String name) {
         this.timeDirection = timeDirection;
-        this.offsetInMinutes = offsetInMinutes;
+        this.offsetInHours = offsetInHours;
         this.name = name;
     }
 
     public static List<TimeOption> getTimes() {
         List<TimeOption> timeOptions = new ArrayList<>();
-        timeOptions.add(new TimeOption(AFTER, 0, "nå"));
-        timeOptions.add(new TimeOption(AFTER, 5, "5 min."));
-        timeOptions.add(new TimeOption(AFTER, 10, "10 min."));
-        timeOptions.add(new TimeOption(AFTER, 15, "15 min."));
-        timeOptions.add(new TimeOption(AFTER, 20, "20 min."));
-        timeOptions.add(new TimeOption(AFTER, 30, "30 min."));
-        timeOptions.add(new TimeOption(AFTER, 45, "45 min."));
-        timeOptions.add(new TimeOption(AFTER, 60, "1 t."));
-        timeOptions.add(new TimeOption(AFTER, 90, "1,5 t."));
-        timeOptions.add(new TimeOption(AFTER, 120, "2 t."));
-        timeOptions.add(new TimeOption(AFTER, 180, "3 t."));
-        timeOptions.add(new TimeOption(BEFORE, 0, "nå"));
-        timeOptions.add(new TimeOption(BEFORE, 5, "5 min."));
-        timeOptions.add(new TimeOption(BEFORE, 10, "10 min."));
-        timeOptions.add(new TimeOption(BEFORE, 15, "15 min."));
-        timeOptions.add(new TimeOption(BEFORE, 20, "20 min."));
-        timeOptions.add(new TimeOption(BEFORE, 30, "30 min."));
-        timeOptions.add(new TimeOption(BEFORE, 45, "45 min."));
-        timeOptions.add(new TimeOption(BEFORE, 60, "1 t."));
-        timeOptions.add(new TimeOption(BEFORE, 90, "1,5 t."));
-        timeOptions.add(new TimeOption(BEFORE, 120, "2 t."));
-        timeOptions.add(new TimeOption(BEFORE, 180, "3 t."));
+        for (int hours = 0; hours <= 24; hours++) {
+            String asText = hours == 0 ? "nå" : hours + "t";
+            timeOptions.add(new TimeOption(AFTER, hours, asText));
+        }
+
+        for (int hours = 0; hours <= 24; hours++) {
+            String asText = hours == 0 ? "nå" : hours + "t";
+            timeOptions.add(new TimeOption(BEFORE, hours, asText));
+        }
         return timeOptions;
     }
 
@@ -52,10 +40,8 @@ public class TimeOption {
         return timeDirection;
     }
 
-    public Calendar getTime() {
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.MINUTE, offsetInMinutes);
-        return now;
+    public DateTime getTime() {
+        return DateTime.now().plusHours(offsetInHours);
     }
 
     public String toString() {
