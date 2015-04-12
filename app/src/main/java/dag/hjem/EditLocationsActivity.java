@@ -42,6 +42,7 @@ public class EditLocationsActivity extends Activity {
                     Bundle b = new Bundle();
                     b.putSerializable("locationindex", position);
                     EditLocationDialogFragment editLocationDialogFragment = new EditLocationDialogFragment();
+                    editLocationDialogFragment.locationListAdapter = locationListAdapter;
                     editLocationDialogFragment.setArguments(b);
                     editLocationDialogFragment.show(getFragmentManager(), "Endre navn");
 
@@ -73,7 +74,9 @@ public class EditLocationsActivity extends Activity {
 
     }
 
-    public class EditLocationDialogFragment extends DialogFragment {
+    public static class EditLocationDialogFragment extends DialogFragment {
+        public LocationListAdapter locationListAdapter;
+
         public EditLocationDialogFragment() {
         }
 
@@ -82,7 +85,7 @@ public class EditLocationsActivity extends Activity {
             Bundle bundle = getArguments();
 
             final int position = bundle.getInt("locationindex");
-            final Location location = EditLocationsActivity.this.locationListAdapter.getItem(position);
+            final Location location = locationListAdapter.getItem(position);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -99,7 +102,7 @@ public class EditLocationsActivity extends Activity {
                     try {
                         String newName = newNameTextView.getText().toString();
                         location.setName(newName);
-                        EditLocationsActivity.this.locationListAdapter.updateItem(position, location);
+                        locationListAdapter.updateItem(position, location);
                     } catch (Exception e) {
                         Log.e("hjem", "Feil: " + e.toString());
                         YesNoCancel.show(getActivity(), "Oi!!", e.toString(), YesNoCancel.EMPTY, null, null);

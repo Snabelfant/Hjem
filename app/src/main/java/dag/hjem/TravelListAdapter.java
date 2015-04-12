@@ -43,7 +43,7 @@ public class TravelListAdapter extends ArrayAdapter<Travel> {
         LinearLayout travelSectionsView = (LinearLayout) travelView.findViewById(R.id.travelsections);
         List<Section> sections = travel.getSections();
         View lastViewIfWalkingView = null;
-//        Nesodden kirke -kattås 05:53 på aker brygge:   vente 10, gå 10
+
         for (Section section : sections) {
             View sectionView;
             if (section instanceof WalkingSection) {

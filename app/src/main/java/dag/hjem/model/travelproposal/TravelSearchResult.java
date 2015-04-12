@@ -22,7 +22,7 @@ public class TravelSearchResult {
         return travelSearchResult;
     }
 
-    public static TravelSearchResult fromRuter(String from, String to, TravelResponse ruterResponse) {
+    public static TravelSearchResult fromRuter(String from, String to, boolean isAfter, TravelResponse ruterResponse) {
         TravelSearchResult travelSearchResult = new TravelSearchResult();
         travelSearchResult.from = from;
         travelSearchResult.to = to;
@@ -31,7 +31,10 @@ public class TravelSearchResult {
 
         for (TravelProposal travelProposal : ruterResponse.getTravelProposals()) {
             Travel travel = Travel.fromRuter(travelProposal);
-            travelSearchResult.travels.add(travel);
+
+            if (travel.getSummary().getDepartureTime().getTime().isAfterNow()) {
+                travelSearchResult.travels.add(travel);
+            }
         }
 
         return travelSearchResult;

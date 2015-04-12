@@ -31,7 +31,7 @@ class GetTravelProposals extends Service {
                 try {
                     TravelResponse travelResponse = ruterApi.getTravels(param.getFromId(), param.getFromX(), param.getFromY(),
                             param.getToId(), param.getToX(), param.getToY(), param.isAfter(), param.getDepartureOrArrivalTime());
-                    return TravelSearchResult.fromRuter(param.getFromName(), param.getToName(), travelResponse);
+                    return TravelSearchResult.fromRuter(param.getFromName(), param.getToName(), param.isAfter(), travelResponse);
                 } catch (IOException e) {
                     return TravelSearchResult.fromException(e);
                 }
